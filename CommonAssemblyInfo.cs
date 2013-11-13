@@ -1,6 +1,6 @@
 using System.Reflection;
 
-[assembly: AssemblyCompany("Erik Källén")]
-[assembly: AssemblyProduct("Saltarelle Knockout.js bindings")]
+[assembly: AssemblyCompany("Marwijn Christiaans")]
+[assembly: AssemblyProduct("Saltarelle JayData bindings")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
