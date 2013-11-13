@@ -7,8 +7,8 @@
     <ProjectGuid>{E1D5CD18-46D9-4510-A577-C36D8CD7B718}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Knockout.Tests</RootNamespace>
-    <AssemblyName>Knockout.Tests</AssemblyName>
+    <RootNamespace>JayData.Tests</RootNamespace>
+    <AssemblyName>JayData.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -106,15 +106,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Knockout\bin\mscorlib.dll">
+    <Content Include="..\JayData\bin\mscorlib.dll">
       <Link>mscorlib.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Knockout\bin\Saltarelle.Knockout.dll">
-      <Link>Saltarelle.Knockout.dll</Link>
+    <Content Include="..\JayData\bin\Saltarelle.JayData.dll">
+      <Link>Saltarelle.JayData.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Knockout\bin\Saltarelle.Web.dll">
+    <Content Include="..\JayData\bin\Saltarelle.Web.dll">
       <Link>Saltarelle.Web.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

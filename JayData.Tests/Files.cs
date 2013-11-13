@@ -6,7 +6,7 @@ namespace Knockout.Tests {
 	internal class Files {
 		public static readonly string MscorlibPath = Path.GetFullPath("mscorlib.dll");
 		public static readonly string WebPath = Path.GetFullPath("Saltarelle.Web.dll");
-		public static readonly string KnockoutPath = Path.GetFullPath("Saltarelle.Knockout.dll");
+		public static readonly string KnockoutPath = Path.GetFullPath("Saltarelle.JayData.dll");
 
 		private static readonly Lazy<IAssemblyReference> _mscorlibLazy = new Lazy<IAssemblyReference>(() => new IkvmLoader() { IncludeInternalMembers = true }.LoadAssemblyFile(MscorlibPath));
 		internal static IAssemblyReference Mscorlib { get { return _mscorlibLazy.Value; } }

@@ -16,6 +16,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JayData.Plugin", "JayData.Plugin\JayData.Plugin.csproj", "{014EC28E-64B6-4F64-99C6-16F1B0447278}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JayData.Tests", "JayData.Tests\JayData.Tests.csproj", "{E1D5CD18-46D9-4510-A577-C36D8CD7B718}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DCA0235F-88C1-43A0-A8DB-FF765D344E06} = {DCA0235F-88C1-43A0-A8DB-FF765D344E06}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

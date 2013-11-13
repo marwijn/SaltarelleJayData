@@ -7,8 +7,8 @@
     <ProjectGuid>{014EC28E-64B6-4F64-99C6-16F1B0447278}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Knockout.Plugin</RootNamespace>
-    <AssemblyName>Knockout.Plugin</AssemblyName>
+    <RootNamespace>JayData.Plugin</RootNamespace>
+    <AssemblyName>JayData.Plugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
