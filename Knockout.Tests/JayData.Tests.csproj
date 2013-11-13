@@ -100,9 +100,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Knockout.Plugin\Knockout.Plugin.csproj">
+    <ProjectReference Include="..\Knockout.Plugin\JayData.Plugin.csproj">
       <Project>{014ec28e-64b6-4f64-99c6-16f1b0447278}</Project>
-      <Name>Knockout.Plugin</Name>
+      <Name>JayData.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

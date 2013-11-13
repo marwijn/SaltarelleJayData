@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Knockout", "Knockout\Knockout.csproj", "{DCA0235F-88C1-43A0-A8DB-FF765D344E06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JayData", "Knockout\JayData.csproj", "{DCA0235F-88C1-43A0-A8DB-FF765D344E06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Knockout.Plugin", "Knockout.Plugin\Knockout.Plugin.csproj", "{014EC28E-64B6-4F64-99C6-16F1B0447278}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JayData.Plugin", "Knockout.Plugin\JayData.Plugin.csproj", "{014EC28E-64B6-4F64-99C6-16F1B0447278}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Knockout.Tests", "Knockout.Tests\Knockout.Tests.csproj", "{E1D5CD18-46D9-4510-A577-C36D8CD7B718}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JayData.Tests", "Knockout.Tests\JayData.Tests.csproj", "{E1D5CD18-46D9-4510-A577-C36D8CD7B718}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{82C66E64-F5DD-4DC4-BD66-AA43A9784C46}"
 	ProjectSection(SolutionItems) = preProject
