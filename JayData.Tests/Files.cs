@@ -15,6 +15,6 @@ namespace Knockout.Tests {
 		internal static IAssemblyReference Web { get { return _webLazy.Value; } }
 
 		private static readonly Lazy<IAssemblyReference> _knockoutLazy = new Lazy<IAssemblyReference>(() => new IkvmLoader() { IncludeInternalMembers = true }.LoadAssemblyFile(KnockoutPath));
-		internal static IAssemblyReference Knockout { get { return _knockoutLazy.Value; } }
+		internal static IAssemblyReference JayData { get { return _knockoutLazy.Value; } }
 	}
 }

@@ -29,32 +29,32 @@ Task Clean {
 }
 
 Task Build-Solution -Depends Clean, Generate-VersionInfo {
-	Exec { msbuild "$baseDir\Knockout.sln" /verbosity:minimal /p:"Configuration=$configuration" }
+	Exec { msbuild "$baseDir\JayData.sln" /verbosity:minimal /p:"Configuration=$configuration" }
 }
 
 Task Run-Tests -Depends Build-Solution {
 	if (-not $skipTests) {
 		$runner = (dir "$baseDir\packages" -Recurse -Filter nunit-console.exe | Select -ExpandProperty FullName)
-		Exec { & "$runner" "$baseDir\Knockout.Tests\Knockout.Tests.csproj" -nologo -xml "$outDir\TestResults.xml" }
+		Exec { & "$runner" "$baseDir\JayData.Tests\JayData.Tests.csproj" -nologo -xml "$outDir\TestResults.xml" }
 	}
 }
 
 Task Build-NuGetPackages -Depends Determine-Version, Run-Tests {
-	$config = [xml](Get-Content $baseDir\Knockout\packages.config)
+	$config = [xml](Get-Content $baseDir\JayData\packages.config)
 	$runtimeVersion = $config.SelectSingleNode("//package[@id='Saltarelle.Runtime']/@version").Value
 	$webVersion = $config.SelectSingleNode("//package[@id='Saltarelle.Web']/@version").Value
 
 @"
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
-		<id>Saltarelle.Knockout</id>
+		<id>Saltarelle.JayData</id>
 		<version>$script:Version</version>
-		<title>Metadata required to use Knockout with the Saltarelle C# to JavaScript compiler</title>
-		<description>This package contains the required metadata to use Knockout JS with the Saltarelle C# to JavaScript compiler. It is a slightly modified version of the knockout import library from the Script# project by Nikhil Kothari (https://github.com/nikhilk/scriptsharp).</description>
+		<title>Metadata required to use JayData with the Saltarelle C# to JavaScript compiler</title>
+		<description>This package contains the required metadata to use JayData JS with the Saltarelle C# to JavaScript compiler. It is a slightly modified version of the JayData import library from the Script# project by Nikhil Kothari (https://github.com/nikhilk/scriptsharp).</description>
 		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.txt</licenseUrl>
 		<authors>Nikhil Kothari, Matthew Leibowitz</authors>
 		<projectUrl>http://www.saltarelle-compiler.com</projectUrl>
-		<tags>compiler c# javascript web knockout</tags>
+		<tags>compiler c# javascript web JayData</tags>
 		<dependencies>
 			<dependency id="Saltarelle.Runtime" version="$(Get-DependencyVersion $runtimeVersion)"/>
 			<dependency id="Saltarelle.Web" version="$(Get-DependencyVersion $webVersion)"/>
@@ -63,14 +63,14 @@ Task Build-NuGetPackages -Depends Determine-Version, Run-Tests {
 	<files>
 		<file src="$baseDir\License.txt" target=""/>
 		<file src="$baseDir\history.txt" target=""/>
-		<file src="$baseDir\Knockout\bin\Saltarelle.Knockout.dll" target="lib"/>
-		<file src="$baseDir\Knockout\bin\Saltarelle.Knockout.xml" target="lib"/>
-		<file src="$baseDir\Knockout\knockout*.js" target=""/>
+		<file src="$baseDir\JayData\bin\Saltarelle.JayData.dll" target="lib"/>
+		<file src="$baseDir\JayData\bin\Saltarelle.JayData.xml" target="lib"/>
+		<file src="$baseDir\JayData\JayData*.js" target=""/>
 	</files>
 </package>
-"@ | Out-File -Encoding UTF8 "$outDir\Knockout.nuspec"
+"@ | Out-File -Encoding UTF8 "$outDir\JayData.nuspec"
 
-	Exec { & "$buildtoolsDir\nuget.exe" pack "$outDir\Knockout.nuspec" -NoPackageAnalysis -OutputDirectory "$outDir" }
+	Exec { & "$buildtoolsDir\nuget.exe" pack "$outDir\JayData.nuspec" -NoPackageAnalysis -OutputDirectory "$outDir" }
 }
 
 Task Build -Depends Build-NuGetPackages {
@@ -144,5 +144,5 @@ Function Generate-VersionFile($Path, $Version) {
 }
 
 Task Generate-VersionInfo -Depends Determine-Version {
-	Generate-VersionFile -Path "$baseDir\Knockout\Properties\Version.cs" -Version $script:Version
+	Generate-VersionFile -Path "$baseDir\JayData\Properties\Version.cs" -Version $script:Version
 }
