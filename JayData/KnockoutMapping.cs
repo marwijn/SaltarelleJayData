@@ -6,7 +6,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace KnockoutApi {
+namespace JayDataApi {
 
     /// <summary>
     /// Provides functionality for mapping between knockout models and JSON or

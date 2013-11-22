@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Html;
 using System.Text.RegularExpressions;
 
-namespace KnockoutApi {
+namespace JayDataApi {
 
     [Imported]
     [ScriptNamespace("ko")]

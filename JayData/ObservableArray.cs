@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace KnockoutApi {
+namespace JayDataApi {
 
     /// <summary>
     /// Represents an array of items that can be observed for changes to the set of

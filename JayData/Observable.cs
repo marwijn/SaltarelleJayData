@@ -6,7 +6,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace KnockoutApi {
+namespace JayDataApi {
 
     /// <summary>
     /// Represents an object containing an observable value.

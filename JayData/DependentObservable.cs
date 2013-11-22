@@ -7,7 +7,7 @@ using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
 
-namespace KnockoutApi {
+namespace JayDataApi {
 
     /// <summary>
     /// Represents an object containing a value dependent on other observable values.

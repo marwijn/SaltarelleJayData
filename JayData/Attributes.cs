@@ -7,12 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace KnockoutApi {
+namespace JayDataApi {
 	#if !PLUGIN
 	[NonScriptable]
 	#endif
 	[AttributeUsage(AttributeTargets.Class)]
-	public class KnockoutModelAttribute : Attribute {
+	public class EntityAttribute : Attribute {
 	}
 
 	#if !PLUGIN

@@ -7,7 +7,7 @@ using System.Text;
 using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.CSharp.TypeSystem;
 using ICSharpCode.NRefactory.TypeSystem;
-using Knockout.Plugin;
+using JayData.Plugin;
 using Moq;
 using NUnit.Framework;
 using Saltarelle.Compiler;
@@ -61,224 +61,196 @@ namespace Knockout.Tests {
 		}
 
 		[Test]
-		public void KnockoutPropertyAttributeWorks() {
+		public void AutoPropertiesOnEntitiesMapToFields() {
 			Prepare(
-@"using KnockoutApi;
+@"using JayDataApi;
+
+[Entity]
 public class C {
-	[KnockoutProperty] public int P1 { get; set; }
-	[KnockoutProperty(true)] public int P2 { get; set; }
-	public int P3 { get; set; }
-	[KnockoutProperty(false)] public int P4 { get; set; }
+	public int P1 { get; set; }
 }");
 
 			var p1 = FindProperty("P1");
-			Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.GetMethod.Name, Is.EqualTo("p1"));
-			Assert.That(p1.GetMethod.GeneratedMethodName, Is.Null);
-			Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.SetMethod.Name, Is.EqualTo("p1"));
-			Assert.That(p1.SetMethod.GeneratedMethodName, Is.Null);
-
-			var p2 = FindProperty("P2");
-			Assert.That(p2.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p2.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p2.GetMethod.Name, Is.EqualTo("p2"));
-			Assert.That(p2.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p2.SetMethod.Name, Is.EqualTo("p2"));
-
-			var p3 = FindProperty("P3");
-			Assert.That(p3.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p3.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p3.GetMethod.Name, Is.EqualTo("get_p3"));
-			Assert.That(p3.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p3.SetMethod.Name, Is.EqualTo("set_p3"));
-
-			var p4 = FindProperty("P4");
-			Assert.That(p4.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p4.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p4.GetMethod.Name, Is.EqualTo("get_p4"));
-			Assert.That(p4.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p4.SetMethod.Name, Is.EqualTo("set_p4"));
+			Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.Field));
 		}
 
-		[Test]
-		public void KnockoutModelAttributeWorksButCanBeOverridden() {
-			Prepare(
-@"using KnockoutApi;
-[KnockoutModel]
-public class C {
-	[KnockoutProperty] public int P1 { get; set; }
-	[KnockoutProperty(true)] public int P2 { get; set; }
-	public int P3 { get; set; }
-	[KnockoutProperty(false)] public int P4 { get; set; }
-}");
+//        [Test]
+//        public void KnockoutModelAttributeWorksButCanBeOverridden() {
+//            Prepare(
+//@"using KnockoutApi;
+//[KnockoutModel]
+//public class C {
+//	[KnockoutProperty] public int P1 { get; set; }
+//	[KnockoutProperty(true)] public int P2 { get; set; }
+//	public int P3 { get; set; }
+//	[KnockoutProperty(false)] public int P4 { get; set; }
+//}");
 
-			var p1 = FindProperty("P1");
-			Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.GetMethod.Name, Is.EqualTo("p1"));
-			Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.SetMethod.Name, Is.EqualTo("p1"));
+//            var p1 = FindProperty("P1");
+//            Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
+//            Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.GetMethod.Name, Is.EqualTo("p1"));
+//            Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.SetMethod.Name, Is.EqualTo("p1"));
 
-			var p2 = FindProperty("P2");
-			Assert.That(p2.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p2.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p2.GetMethod.Name, Is.EqualTo("p2"));
-			Assert.That(p2.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p2.SetMethod.Name, Is.EqualTo("p2"));
+//            var p2 = FindProperty("P2");
+//            Assert.That(p2.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
+//            Assert.That(p2.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p2.GetMethod.Name, Is.EqualTo("p2"));
+//            Assert.That(p2.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p2.SetMethod.Name, Is.EqualTo("p2"));
 
-			var p3 = FindProperty("P3");
-			Assert.That(p3.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p3.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p3.GetMethod.Name, Is.EqualTo("p3"));
-			Assert.That(p3.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p3.SetMethod.Name, Is.EqualTo("p3"));
+//            var p3 = FindProperty("P3");
+//            Assert.That(p3.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
+//            Assert.That(p3.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p3.GetMethod.Name, Is.EqualTo("p3"));
+//            Assert.That(p3.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p3.SetMethod.Name, Is.EqualTo("p3"));
 
-			var p4 = FindProperty("P4");
-			Assert.That(p4.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p4.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p4.GetMethod.Name, Is.EqualTo("get_p4"));
-			Assert.That(p4.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p4.SetMethod.Name, Is.EqualTo("set_p4"));
-		}
+//            var p4 = FindProperty("P4");
+//            Assert.That(p4.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
+//            Assert.That(p4.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p4.GetMethod.Name, Is.EqualTo("get_p4"));
+//            Assert.That(p4.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p4.SetMethod.Name, Is.EqualTo("set_p4"));
+//        }
 
-		[Test]
-		public void StaticPropertyOnKnockoutModelIsNotKnockoutProperty() {
-			Prepare(
-@"using KnockoutApi;
-[KnockoutModel]
-public class C {
-	public static int P1 { get; set; }
-	[KnockoutProperty(false)] public static int P2 { get; set; }
-}");
+//        [Test]
+//        public void StaticPropertyOnKnockoutModelIsNotKnockoutProperty() {
+//            Prepare(
+//@"using KnockoutApi;
+//[KnockoutModel]
+//public class C {
+//	public static int P1 { get; set; }
+//	[KnockoutProperty(false)] public static int P2 { get; set; }
+//}");
 
-			var p1 = FindProperty("P1");
-			Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.GetMethod.Name, Is.EqualTo("get_p1"));
-			Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.SetMethod.Name, Is.EqualTo("set_p1"));
+//            var p1 = FindProperty("P1");
+//            Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
+//            Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.GetMethod.Name, Is.EqualTo("get_p1"));
+//            Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.SetMethod.Name, Is.EqualTo("set_p1"));
 
-			var p2 = FindProperty("P2");
-			Assert.That(p2.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p2.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p2.GetMethod.Name, Is.EqualTo("get_p2"));
-			Assert.That(p2.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p2.SetMethod.Name, Is.EqualTo("set_p2"));
-		}
+//            var p2 = FindProperty("P2");
+//            Assert.That(p2.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
+//            Assert.That(p2.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p2.GetMethod.Name, Is.EqualTo("get_p2"));
+//            Assert.That(p2.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p2.SetMethod.Name, Is.EqualTo("set_p2"));
+//        }
 
-		[Test]
-		public void KnockoutPropertyAttributeOnStaticPropertyIsAnError() {
-			Prepare(
-@"using KnockoutApi;
-public class C1 {
-	[KnockoutProperty]
-	public static int P1 { get; set; }
-}", expectErrors: true);
-			Assert.That(_errorReporter.AllMessages.Any(m => m.FormattedMessage.Contains("static") && m.FormattedMessage.Contains("C1.P1") && m.FormattedMessage.Contains("KnockoutPropertyAttribute")));
-		}
+//        [Test]
+//        public void KnockoutPropertyAttributeOnStaticPropertyIsAnError() {
+//            Prepare(
+//@"using KnockoutApi;
+//public class C1 {
+//	[KnockoutProperty]
+//	public static int P1 { get; set; }
+//}", expectErrors: true);
+//            Assert.That(_errorReporter.AllMessages.Any(m => m.FormattedMessage.Contains("static") && m.FormattedMessage.Contains("C1.P1") && m.FormattedMessage.Contains("KnockoutPropertyAttribute")));
+//        }
 
-		[Test]
-		public void ExplicitlyImplementedKnockoutPropertyIsAnError() {
-			Prepare(
-@"using KnockoutApi;
-[KnockoutModel]
-public class C1 {
-	public int P1 { get { return 0; } set {} }
-}", expectErrors: true);
-			Assert.That(_errorReporter.AllMessages.Any(m => m.FormattedMessage.Contains("not an auto-property") && m.FormattedMessage.Contains("C1.P1") && m.FormattedMessage.Contains("knockout property")));
+//        [Test]
+//        public void ExplicitlyImplementedKnockoutPropertyIsAnError() {
+//            Prepare(
+//@"using KnockoutApi;
+//[KnockoutModel]
+//public class C1 {
+//	public int P1 { get { return 0; } set {} }
+//}", expectErrors: true);
+//            Assert.That(_errorReporter.AllMessages.Any(m => m.FormattedMessage.Contains("not an auto-property") && m.FormattedMessage.Contains("C1.P1") && m.FormattedMessage.Contains("knockout property")));
 
-			Prepare(
-@"using KnockoutApi;
-[KnockoutModel]
-public class C1 {
-	public int P1 { get { return 0; } }
-}", expectErrors: true);
-			Assert.That(_errorReporter.AllMessages.Any(m => m.FormattedMessage.Contains("not an auto-property") && m.FormattedMessage.Contains("C1.P1") && m.FormattedMessage.Contains("knockout property")));
+//            Prepare(
+//@"using KnockoutApi;
+//[KnockoutModel]
+//public class C1 {
+//	public int P1 { get { return 0; } }
+//}", expectErrors: true);
+//            Assert.That(_errorReporter.AllMessages.Any(m => m.FormattedMessage.Contains("not an auto-property") && m.FormattedMessage.Contains("C1.P1") && m.FormattedMessage.Contains("knockout property")));
 
-			Prepare(
-@"using KnockoutApi;
-[KnockoutModel]
-public class C1 {
-	public int P1 { set {} }
-}", expectErrors: true);
-			Assert.That(_errorReporter.AllMessages.Any(m => m.FormattedMessage.Contains("not an auto-property") && m.FormattedMessage.Contains("C1.P1") && m.FormattedMessage.Contains("knockout property")));
-		}
+//            Prepare(
+//@"using KnockoutApi;
+//[KnockoutModel]
+//public class C1 {
+//	public int P1 { set {} }
+//}", expectErrors: true);
+//            Assert.That(_errorReporter.AllMessages.Any(m => m.FormattedMessage.Contains("not an auto-property") && m.FormattedMessage.Contains("C1.P1") && m.FormattedMessage.Contains("knockout property")));
+//        }
 
-		[Test]
-		public void KnockoutPropertyRespectsScriptName() {
-			Prepare(
-@"using KnockoutApi;
-using System.Runtime.CompilerServices;
-public class C {
-	[KnockoutProperty, ScriptName(""renamed"")] public int P1 { get; set; }
-}");
+//        [Test]
+//        public void KnockoutPropertyRespectsScriptName() {
+//            Prepare(
+//@"using KnockoutApi;
+//using System.Runtime.CompilerServices;
+//public class C {
+//	[KnockoutProperty, ScriptName(""renamed"")] public int P1 { get; set; }
+//}");
 
-			var p1 = FindProperty("P1");
-			Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.GetMethod.Name, Is.EqualTo("renamed"));
-			Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.SetMethod.Name, Is.EqualTo("renamed"));
-		}
+//            var p1 = FindProperty("P1");
+//            Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
+//            Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.GetMethod.Name, Is.EqualTo("renamed"));
+//            Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.SetMethod.Name, Is.EqualTo("renamed"));
+//        }
 
-		[Test]
-		public void KnockoutPropertyReservesName() {
-			Prepare(
-@"using KnockoutApi;
-using System.Runtime.CompilerServices;
-public class C {
-	[KnockoutProperty, ScriptName(""renamed"")] public int P1 { get; set; }
-	public void Renamed() {}
-}");
+//        [Test]
+//        public void KnockoutPropertyReservesName() {
+//            Prepare(
+//@"using KnockoutApi;
+//using System.Runtime.CompilerServices;
+//public class C {
+//	[KnockoutProperty, ScriptName(""renamed"")] public int P1 { get; set; }
+//	public void Renamed() {}
+//}");
 
-			var p1 = FindProperty("P1");
-			Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.GetMethod.Name, Is.EqualTo("renamed"));
-			Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.SetMethod.Name, Is.EqualTo("renamed"));
+//            var p1 = FindProperty("P1");
+//            Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
+//            Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.GetMethod.Name, Is.EqualTo("renamed"));
+//            Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.SetMethod.Name, Is.EqualTo("renamed"));
 
-			var m = FindMethod("Renamed");
-			Assert.That(m.Name, Is.EqualTo("renamed$1"));
-		}
+//            var m = FindMethod("Renamed");
+//            Assert.That(m.Name, Is.EqualTo("renamed$1"));
+//        }
 
-		[Test]
-		public void KnockoutPropertyWorksWhenDesiredNameIsUsed() {
-			Prepare(
-@"using KnockoutApi;
-using System.Runtime.CompilerServices;
-public class B {
-	public void TheName() {}
-}
-public class C : B{
-	[KnockoutProperty] public int TheName { get; set; }
-}");
+//        [Test]
+//        public void KnockoutPropertyWorksWhenDesiredNameIsUsed() {
+//            Prepare(
+//@"using KnockoutApi;
+//using System.Runtime.CompilerServices;
+//public class B {
+//	public void TheName() {}
+//}
+//public class C : B{
+//	[KnockoutProperty] public int TheName { get; set; }
+//}");
 
-			var p1 = FindProperty("TheName");
-			Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.GetMethod.Name, Is.EqualTo("theName$1"));
-			Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.SetMethod.Name, Is.EqualTo("theName$1"));
-		}
+//            var p1 = FindProperty("TheName");
+//            Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
+//            Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.GetMethod.Name, Is.EqualTo("theName$1"));
+//            Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.SetMethod.Name, Is.EqualTo("theName$1"));
+//        }
 
-		[Test]
-		public void KnockoutPropertyWorksWithMinifiedNames() {
-			Prepare(
-@"using KnockoutApi;
-using System.Runtime.CompilerServices;
-public class C {
-	[KnockoutProperty] int P1 { get; set; }
-}", MinimizeNames: true);
+//        [Test]
+//        public void KnockoutPropertyWorksWithMinifiedNames() {
+//            Prepare(
+//@"using KnockoutApi;
+//using System.Runtime.CompilerServices;
+//public class C {
+//	[KnockoutProperty] int P1 { get; set; }
+//}", MinimizeNames: true);
 
-			var p1 = FindProperty("P1");
-			Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
-			Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.GetMethod.Name, Is.EqualTo("$0"));
-			Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
-			Assert.That(p1.SetMethod.Name, Is.EqualTo("$0"));
-		}
-	}
+//            var p1 = FindProperty("P1");
+//            Assert.That(p1.Type, Is.EqualTo(PropertyScriptSemantics.ImplType.GetAndSetMethods));
+//            Assert.That(p1.GetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.GetMethod.Name, Is.EqualTo("$0"));
+//            Assert.That(p1.SetMethod.Type, Is.EqualTo(MethodScriptSemantics.ImplType.NormalMethod));
+//            Assert.That(p1.SetMethod.Name, Is.EqualTo("$0"));
+//        }
+    }
 }

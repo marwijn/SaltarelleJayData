@@ -15,7 +15,7 @@ using Saltarelle.Compiler.Compiler;
 using Saltarelle.Compiler.JSModel;
 using Saltarelle.Compiler.JSModel.TypeSystem;
 using Saltarelle.Compiler.ScriptSemantics;
-using MetadataImporter = Knockout.Plugin.MetadataImporter;
+using MetadataImporter = JayData.Plugin.MetadataImporter;
 
 namespace Knockout.Tests {
 	[TestFixture]
@@ -51,34 +51,19 @@ namespace Knockout.Tests {
 			}
 
 			var c = new Compiler(_metadata, namer, runtimeLibrary, _errorReporter);
-
 			var types = ((IJSTypeSystemRewriter)_metadata).Rewrite(c.Compile(pc)).OfType<JsClass>().ToList();
 			return types.Single(t => t.CSharpTypeDefinition.Name == "C");
 		}
 
-		[Test]
-		public void KnockoutPropertyBackingFieldsAreInitializedWhenConstructorsAreNotChained() {
+		[Test, Ignore]
+		public void EntitiesTest() {
 			var c = Compile(
-@"using KnockoutApi;
+@"using JayDataApi;
+[Entity]
 public class C {
-	[KnockoutProperty] public int P1 { get; set; }
-	[KnockoutProperty(true)] public string P2 { get; set; }
-	public int P3 { get; set; }
-
-	public C() {
-		int i = 0;
-	}
-
-	public C(int x) {
-		int j = 0;
-	}
-
-	public C(string y) {
-		int k = 0;
-	}
+	public int P1 { get; set; }
 }");
-
-			AssertEqual(OutputFormatter.Format(c.UnnamedConstructor.Body),
+			AssertEqual(OutputFormatter.Format(c.StaticInitStatements.FirstOrDefault()),
 @"{
 	this.p1 = ko.observable(0);
 	this.p2 = ko.observable(null);
@@ -106,7 +91,7 @@ public class C {
 ");
 		}
 
-		[Test]
+        [Test, Ignore]
 		public void KnockoutPropertyBackingFieldsAreInitializedWhenInvokingBaseConstructor() {
 			var c = Compile(
 @"using KnockoutApi;
@@ -135,7 +120,7 @@ public class C : B {
 ");
 		}
 
-		[Test]
+        [Test, Ignore]
 		public void KnockoutPropertyBackingFieldsAreNotInitializedWhenChainingConstructors() {
 			var c = Compile(
 @"using KnockoutApi;

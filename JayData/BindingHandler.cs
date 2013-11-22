@@ -8,7 +8,7 @@ using System.Collections;
 using System.Html;
 using System.Runtime.CompilerServices;
 
-namespace KnockoutApi {
+namespace JayDataApi {
 
     /// <summary>
     /// Represents a custom binding handler in Knockout.

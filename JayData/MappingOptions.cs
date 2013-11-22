@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace KnockoutApi
+namespace JayDataApi
 {
     [Imported, Serializable]
     public class MappingOptions

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Html;
 using System.Runtime.CompilerServices;
 
-namespace KnockoutApi {
+namespace JayDataApi {
 
     /// <summary>
     /// Provides Knockout functionality.
