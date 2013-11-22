@@ -140,7 +140,17 @@ namespace JayData.Plugin {
             clazz = clazz.Clone();
             
             clazz.StaticInitStatements.Add(JsStatement.Comment("TEST"));
-            clazz.StaticInitStatements.Add(JsExpression.String("Hello World"));
+
+            var parameters = new List<JsExpression>();
+            var param1 = JsExpression.String(clazz.CSharpTypeDefinition.Name);
+
+            var param2 = JsExpression.ObjectLiteral(new[] { new JsObjectLiteralProperty("Id", JsExpression.String("test")), new JsObjectLiteralProperty("Id2", JsExpression.String("test2")) });
+
+            parameters.Add(param1);
+            parameters.Add(param2);
+
+            clazz.StaticInitStatements.Add(
+                JsExpression.Invocation(JsExpression.Member(JsExpression.Member(JsExpression.Identifier("$data"), "Entity"),"extend"), parameters));
 
 
 

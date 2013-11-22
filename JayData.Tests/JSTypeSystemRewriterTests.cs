@@ -63,7 +63,7 @@ namespace Knockout.Tests {
 public class C {
 	public int P1 { get; set; }
 }");
-			AssertEqual(OutputFormatter.Format(c.StaticInitStatements.FirstOrDefault()),
+			AssertEqual(OutputFormatter.Format(c.StaticInitStatements[1]),
 @"{
 	this.p1 = ko.observable(0);
 	this.p2 = ko.observable(null);
