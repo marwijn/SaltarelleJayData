@@ -45,16 +45,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="BindingContext.cs" />
-    <Compile Include="CompareResult.cs" />
     <Compile Include="Attributes.cs" />
-    <Compile Include="DependentObservableOptions.cs" />
-    <Compile Include="BindingHandler.cs" />
-    <Compile Include="DependentObservable.cs" />
-    <Compile Include="Knockout.cs" />
-    <Compile Include="Subscribable.cs" />
-    <Compile Include="ComputedObservable.cs" />
-    <Compile Include="ComputedOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,8 +54,6 @@
     <EmbeddedResource Include="..\JayData.Plugin\bin\JayData.Plugin.dll">
       <Link>JayData.Plugin.dll</Link>
     </EmbeddedResource>
-    <Content Include="knockout-2.2.0.js" />
-    <Content Include="knockout-2.2.0.min.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JayData.Plugin\JayData.Plugin.csproj">
