@@ -50,13 +50,8 @@
     <Compile Include="Attributes.cs" />
     <Compile Include="DependentObservableOptions.cs" />
     <Compile Include="BindingHandler.cs" />
-    <Compile Include="KnockoutMapping.cs" />
-    <Compile Include="KnockoutUtils.cs" />
-    <Compile Include="MappingOptions.cs" />
-    <Compile Include="ObservableArray.cs" />
     <Compile Include="DependentObservable.cs" />
     <Compile Include="Knockout.cs" />
-    <Compile Include="Observable.cs" />
     <Compile Include="Subscribable.cs" />
     <Compile Include="ComputedObservable.cs" />
     <Compile Include="ComputedOptions.cs" />

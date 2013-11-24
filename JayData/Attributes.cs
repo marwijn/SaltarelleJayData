@@ -19,15 +19,28 @@ namespace JayDataApi {
 	[NonScriptable]
 	#endif
 	[AttributeUsage(AttributeTargets.Property)]
-	public class KnockoutPropertyAttribute : Attribute {
-		public bool IsKnockoutProperty { get; private set; }
+	public class InversePropertyAttribute : Attribute {
+		public string InverseProperty { get; private set; }
 
-		public KnockoutPropertyAttribute() {
-			IsKnockoutProperty = true;
-		}
-
-		public KnockoutPropertyAttribute(bool isKnockoutProperty) {
-			IsKnockoutProperty = isKnockoutProperty;
-		}
+        public InversePropertyAttribute(string inverseProperty)
+        {
+            InverseProperty = inverseProperty;
+        }
 	}
+
+    #if !PLUGIN
+	[NonScriptable]
+    #endif
+    [AttributeUsage(AttributeTargets.Property)]
+    public class KeyAttribute : Attribute
+    {
+    }
+
+    #if !PLUGIN
+	[NonScriptable]
+    #endif
+    [AttributeUsage(AttributeTargets.Property)]
+    public class ComputedAttribute : Attribute
+    {
+    }
 }

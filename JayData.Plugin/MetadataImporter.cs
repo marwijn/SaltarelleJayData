@@ -1,29 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CoreLib.Plugin;
 using ICSharpCode.NRefactory.TypeSystem;
+using JayDataApi;
 using Saltarelle.Compiler;
 using Saltarelle.Compiler.Compiler;
 using Saltarelle.Compiler.Decorators;
 using Saltarelle.Compiler.JSModel.Expressions;
-using Saltarelle.Compiler.JSModel.Statements;
 using Saltarelle.Compiler.JSModel.TypeSystem;
 using Saltarelle.Compiler.ScriptSemantics;
 
 namespace JayData.Plugin {
-	public class MetadataImporter : MetadataImporterDecoratorBase, IJSTypeSystemRewriter, IRuntimeContext {
+	public class MetadataImporter : MetadataImporterDecoratorBase, IJSTypeSystemRewriter, IRuntimeContext
+	{
+
+	    private readonly Dictionary<string, string> _typeMapping = new Dictionary<string, string>(); 
+
 		private readonly IErrorReporter _errorReporter;
 		private readonly IRuntimeLibrary _runtimeLibrary;
 		private readonly INamer _namer;
 		private readonly bool _minimizeNames;
-		private readonly Dictionary<IProperty, string> _knockoutProperties = new Dictionary<IProperty, string>();
 
 		public MetadataImporter(IMetadataImporter prev, IErrorReporter errorReporter, IRuntimeLibrary runtimeLibrary, INamer namer, CompilerOptions options) : base(prev) {
 			_errorReporter  = errorReporter;
 			_runtimeLibrary = runtimeLibrary;
 			_namer          = namer;
 			_minimizeNames  = options.MinimizeScript;
+            _typeMapping.Add("System.Int32", "int");
+            _typeMapping.Add("System.String", "string");
+            _typeMapping.Add("System.Collections.Generic.IList", "Array");
 		}
 
 
@@ -60,13 +65,6 @@ namespace JayData.Plugin {
             return property.Getter != null && property.Setter != null && property.Getter.BodyRegion == default(DomRegion) && property.Setter.BodyRegion == default(DomRegion);
         }
 
-        //public override void Prepare(ITypeDefinition type) {
-        //    foreach (var p in type.Properties.Where(IsKnockoutProperty)) {
-        //        PrepareKnockoutProperty(p);
-        //    }
-
-        //    base.Prepare(type);
-        //}
 
         //// Implementation and helpers for IJSTypeSystemRewriter
 
@@ -137,16 +135,47 @@ namespace JayData.Plugin {
         {
             var clazz = type as JsClass;
             if (clazz == null) return type;
+            var entityAttribute = AttributeReader.ReadAttribute<EntityAttribute>(clazz.CSharpTypeDefinition.GetAttributes());
+            if (entityAttribute == null) return type;
+
             clazz = clazz.Clone();
-            
-            clazz.StaticInitStatements.Add(JsStatement.Comment("TEST"));
 
             var parameters = new List<JsExpression>();
-            var param1 = JsExpression.String(clazz.CSharpTypeDefinition.Name);
+            var propertyDefinitions = JsExpression.String(clazz.CSharpTypeDefinition.FullName);
+            var propertyInitializerList = new List<JsObjectLiteralProperty>();
 
-            var param2 = JsExpression.ObjectLiteral(new[] { new JsObjectLiteralProperty("Id", JsExpression.String("test")), new JsObjectLiteralProperty("Id2", JsExpression.String("test2")) });
+            foreach (var property in clazz.CSharpTypeDefinition.Properties)
+            {
+                var mappedType = _typeMapping.ContainsKey(property.ReturnType.FullName)
+                                        ? _typeMapping[property.ReturnType.FullName]
+                                        : property.ReturnType.FullName;
+                var initializers = new List<JsObjectLiteralProperty>();
+                var typeInitializer = new JsObjectLiteralProperty("type", JsExpression.String(mappedType));
+                initializers.Add(typeInitializer);
+                if (mappedType == "Array")
+                {
+                    var elementName = property.ReturnType.TypeArguments[0].FullName;
+                    initializers.Add(new JsObjectLiteralProperty("elementType", JsExpression.String(elementName)));
+                }
+                if (AttributeReader.HasAttribute<InversePropertyAttribute>(property.Attributes))
+                {
+                    var inverse = AttributeReader.ReadAttribute<InversePropertyAttribute>(property.Attributes).InverseProperty;
+                    initializers.Add(new JsObjectLiteralProperty("inverseProperty", JsExpression.String(inverse)));
+                }
+                if (AttributeReader.HasAttribute<KeyAttribute>(property.Attributes))
+                {
+                    initializers.Add(new JsObjectLiteralProperty("key", JsExpression.Boolean(true)));
+                }
+                if (AttributeReader.HasAttribute<ComputedAttribute>(property.Attributes))
+                {
+                    initializers.Add(new JsObjectLiteralProperty("computed", JsExpression.Boolean(true)));
+                }
+                propertyInitializerList.Add(new JsObjectLiteralProperty(property.Name, JsExpression.ObjectLiteral(initializers.ToArray())));
+            }
 
-            parameters.Add(param1);
+            var param2 = JsExpression.ObjectLiteral(propertyInitializerList);
+ 
+            parameters.Add(propertyDefinitions);
             parameters.Add(param2);
 
             clazz.StaticInitStatements.Add(
@@ -159,8 +188,9 @@ namespace JayData.Plugin {
 
         public override void Prepare(ITypeDefinition type)
         {
-            if (AttributeReader.HasAttribute<JayDataApi.EntityAttribute>(type))
+            if (AttributeReader.HasAttribute<EntityAttribute>(type))
             {
+
                 foreach (var p in type.Properties.Where(p => IsAutoProperty(p) == true))
                 {
                     base.ReserveMemberName(p.DeclaringTypeDefinition, p.Name, false);
@@ -177,7 +207,8 @@ namespace JayData.Plugin {
 
 	    public JsExpression ResolveTypeParameter(ITypeParameter tp)
 	    {
-            return JsExpression.Identifier(_namer.GetTypeParameterName(tp));
+            //var typeName =  JsExpression.Identifier(_namer.GetTypeParameterName(tp));
+	        return JsExpression.Identifier("XXX");
 	    }
 
 	    public JsExpression EnsureCanBeEvaluatedMultipleTimes(JsExpression expression, IList<JsExpression> expressionsThatMustBeEvaluatedBefore)
