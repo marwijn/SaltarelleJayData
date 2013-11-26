@@ -15,6 +15,15 @@ namespace JayDataApi {
 	public class EntityAttribute : Attribute {
 	}
 
+#if !PLUGIN
+	[NonScriptable]
+#endif
+    [AttributeUsage(AttributeTargets.Class)]
+    public class EntityContextAttribute : Attribute
+    {
+    }
+
+
 	#if !PLUGIN
 	[NonScriptable]
 	#endif

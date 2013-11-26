@@ -83,38 +83,8 @@ public class C {
     D P3 {get;set;}
 }");
             AssertEqual
-                (OutputFormatter.Format(c.StaticInitStatements[0]),
-                 @"$data.Entity.extend('C', { Id: { type: 'int', key: true, computed: true }, P2: { type: 'Array', elementType: 'D', inverseProperty: 'P1' }, P3: { type: 'D' } });" +"\n");
-        }
-
-        [Test, Ignore]
-        public void KnockoutPropertyBackingFieldsAreInitializedWhenInvokingBaseConstructor()
-        {
-            var c = Compile(
-                @"using KnockoutApi;
-public class B {
-	public B(int i) {}
-}
-
-public class C : B {
-	[KnockoutProperty] public int P1 { get; set; }
-	[KnockoutProperty(true)] public string P2 { get; set; }
-	public int P3 { get; set; }
-
-	public C() : base(0) {
-		int i = 0;
-	}
-}");
-
-            AssertEqual(OutputFormatter.Format(c.UnnamedConstructor.Body, allowIntermediates: true),
-                        @"{
-	this.p1 = ko.observable(0);
-	this.p2 = ko.observable(null);
-	this.$2$P3Field = 0;
-	{B}.call(this, 0);
-	var i = 0;
-}
-");
+                (OutputFormatter.Format(c.UnnamedConstructor),
+                 @"$data.Entity.extend('C', { Id: { type: 'int', key: true, computed: true }, P2: { type: 'Array', elementType: 'D', inverseProperty: 'P1' }, P3: { type: 'D' } })");
         }
     }
 }

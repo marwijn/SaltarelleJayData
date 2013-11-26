@@ -178,10 +178,12 @@ namespace JayData.Plugin {
             parameters.Add(propertyDefinitions);
             parameters.Add(param2);
 
-            clazz.StaticInitStatements.Add(
-                JsExpression.Invocation(JsExpression.Member(JsExpression.Member(JsExpression.Identifier("$data"), "Entity"),"extend"), parameters));
+            var originalConstructor = clazz.UnnamedConstructor;
+            
 
+            var constructorBody =  JsExpression.Invocation(JsExpression.Member(JsExpression.Member(JsExpression.Identifier("$data"), "Entity"),"extend"), parameters);
 
+            clazz.UnnamedConstructor = constructorBody;//JsExpression.FunctionDefinition(originalConstructor.ParameterNames, constructorBody);
 
             return clazz;
         }
@@ -207,8 +209,8 @@ namespace JayData.Plugin {
 
 	    public JsExpression ResolveTypeParameter(ITypeParameter tp)
 	    {
-            //var typeName =  JsExpression.Identifier(_namer.GetTypeParameterName(tp));
-	        return JsExpression.Identifier("XXX");
+            var typeName =  JsExpression.Identifier(_namer.GetTypeParameterName(tp));
+	        return typeName;
 	    }
 
 	    public JsExpression EnsureCanBeEvaluatedMultipleTimes(JsExpression expression, IList<JsExpression> expressionsThatMustBeEvaluatedBefore)
