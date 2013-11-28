@@ -33,7 +33,7 @@ namespace JayData.Tests {
                                 bool expectErrors = false)
         {
             var pc = PreparedCompilation.CreateCompilation("Test", new[] {new MockSourceFile("File1.cs", source)},
-                                                           new[] {Files.Mscorlib, Files.Web, Files.JayData},
+                                                           new[] {Files.Mscorlib, Files.JayData},
                                                            new List<string>());
             _compilation = pc.Compilation;
 
@@ -63,10 +63,10 @@ namespace JayData.Tests {
         }
 
         [Test]
-        public void StaticInitStatement()
+        public void EnityConstructor()
         {
             var c = Compile(
-                @"using JayDataApi;
+@"using JayDataApi;
 using System.Collections.Generic;
 
 [Entity]
@@ -85,6 +85,34 @@ public class C {
             AssertEqual
                 (OutputFormatter.Format(c.UnnamedConstructor),
                  @"$data.Entity.extend('C', { Id: { type: 'int', key: true, computed: true }, P2: { type: 'Array', elementType: 'D', inverseProperty: 'P1' }, P3: { type: 'D' } })");
+        }
+
+        [Test]
+        public void EntityContextConstructor()
+        {
+            var c = Compile(
+@"
+using JayDataApi;
+using System.Collections.Generic;
+
+namespace JayDataApi
+{
+    public class EntitySet<T> 
+    {
+    }
+}
+
+[Entity]
+public class D {
+}
+
+[EntityContext]
+public class C {
+    EntitySet<D> P1 {get; set;}
+}");
+            AssertEqual
+                (OutputFormatter.Format(c.UnnamedConstructor),
+                 @"$data.EntityContext.extend({ P1: { type: '$data.EntitySet', elementType: 'D' } })");
         }
     }
 }

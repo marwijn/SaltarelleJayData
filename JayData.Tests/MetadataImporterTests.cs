@@ -32,7 +32,7 @@ namespace Knockout.Tests {
 				syntaxTree.AcceptVisitor(new TypeSystemConvertVisitor(pf));
 				project = project.AddOrUpdateFiles(pf);
 			}
-			project = project.AddAssemblyReferences(new[] { Files.Mscorlib, Files.Web, Files.JayData });
+			project = project.AddAssemblyReferences(new[] { Files.Mscorlib, Files.JayData });
 
 			_compilation = project.CreateCompilation();
 
