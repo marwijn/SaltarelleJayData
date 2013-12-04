@@ -48,6 +48,7 @@
     <Compile Include="Attributes.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContextConfiguration.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityContext.cs" />
     <Compile Include="EntitySet.cs" />

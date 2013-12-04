@@ -42,8 +42,7 @@ Task Run-Tests -Depends Build-Solution {
 Task Build-NuGetPackages -Depends Determine-Version, Run-Tests {
 	$config = [xml](Get-Content $baseDir\JayData\packages.config)
 	$runtimeVersion = $config.SelectSingleNode("//package[@id='Saltarelle.Runtime']/@version").Value
-	$webVersion = $config.SelectSingleNode("//package[@id='Saltarelle.Web']/@version").Value
-
+	$runtimeVersion = "2.4"
 @"
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
@@ -57,7 +56,6 @@ Task Build-NuGetPackages -Depends Determine-Version, Run-Tests {
 		<tags>compiler c# javascript web JayData</tags>
 		<dependencies>
 			<dependency id="Saltarelle.Runtime" version="$(Get-DependencyVersion $runtimeVersion)"/>
-			<dependency id="Saltarelle.Web" version="$(Get-DependencyVersion $webVersion)"/>
 		</dependencies>
 	</metadata>
 	<files>

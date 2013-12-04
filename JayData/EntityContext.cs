@@ -1,10 +1,12 @@
-﻿namespace JayDataApi
+﻿using System.Threading.Tasks;
+
+namespace JayDataApi
 {
     public class EntityContext
     {
-        public bool Ready()
+        public Task Ready()
         {
-            return true;
+            return Task.FromDoneCallback(this, "onReady", new object[0]);
         }
     }
 }
