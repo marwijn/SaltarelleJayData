@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JayData.Tests", "JayData.Te
 		{DCA0235F-88C1-43A0-A8DB-FF765D344E06} = {DCA0235F-88C1-43A0-A8DB-FF765D344E06}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaltarelleJayData.Example", "SaltarelleJayData.Example\SaltarelleJayData.Example.csproj", "{C1CEF22F-51AF-47C2-ABF1-87262CF8D848}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{E1D5CD18-46D9-4510-A577-C36D8CD7B718}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1D5CD18-46D9-4510-A577-C36D8CD7B718}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1D5CD18-46D9-4510-A577-C36D8CD7B718}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1CEF22F-51AF-47C2-ABF1-87262CF8D848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1CEF22F-51AF-47C2-ABF1-87262CF8D848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1CEF22F-51AF-47C2-ABF1-87262CF8D848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1CEF22F-51AF-47C2-ABF1-87262CF8D848}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
