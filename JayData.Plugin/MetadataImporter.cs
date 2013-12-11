@@ -7,6 +7,7 @@ using Saltarelle.Compiler;
 using Saltarelle.Compiler.Compiler;
 using Saltarelle.Compiler.Decorators;
 using Saltarelle.Compiler.JSModel.Expressions;
+using Saltarelle.Compiler.JSModel.Statements;
 using Saltarelle.Compiler.JSModel.TypeSystem;
 using Saltarelle.Compiler.ScriptSemantics;
 
@@ -73,7 +74,33 @@ namespace JayData.Plugin
 
         public IEnumerable<JsType> Rewrite(IEnumerable<JsType> types)
         {
-            var clazz = types.First() as JsClass;
+            return types.Select(Rewrite);
+        }
+
+        private JsType Rewrite(JsType type)
+        {
+            var clazz = type as JsClass;
+            if (clazz == null) return type;
+
+            if (AttributeReader.HasAttribute<EntityAttribute>(clazz.CSharpTypeDefinition.Attributes))
+            {
+                var newClazz = clazz.Clone();
+
+                var statements = new List<JsStatement> (clazz.UnnamedConstructor.Body.Statements);
+
+               var constructorMethodName = "$" + type.CSharpTypeDefinition.FullName.Replace('.', '_') + "$JayDataConstructor";
+
+                var callJayDataConstructor = JsExpression.Invocation(JsExpression.Member(JsExpression.Identifier(constructorMethodName), "call"), JsExpression.This);
+
+                statements.Add(callJayDataConstructor);
+
+                newClazz.UnnamedConstructor = JsExpression.FunctionDefinition(
+                    clazz.UnnamedConstructor.ParameterNames, JsStatement.Block(statements), clazz.UnnamedConstructor.Name);
+                
+                return newClazz;
+            }
+
+            return clazz;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SaltarelleJayData.Example
+﻿using JayDataApi;
+
+namespace SaltarelleJayData.Example
 {
     public class A
     {
@@ -10,6 +12,7 @@
         public int AInt { get; set; }
     }
 
+    [Entity]
     public class B : A
     {
         public B(int a, int b) : base(a)

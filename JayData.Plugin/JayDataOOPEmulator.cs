@@ -24,17 +24,38 @@ namespace JayData.Plugin
 
         public override TypeOOPEmulation EmulateType(JsType type)
         {
-            if (IsJayType(type.CSharpTypeDefinition))
-            {
-                return new TypeOOPEmulation(
-                    new[]
-                        {
-                            new TypeOOPEmulationPhase(
-                                type.CSharpTypeDefinition.GetAllBaseTypeDefinitions()
-                                    .Where(x => !x.Equals(type.CSharpTypeDefinition)), new JsStatement[] {JsStatement.Var(), JsExpression.Assign(new JsTypeReferenceExpression(type.CSharpTypeDefinition), GenerateJayInitCall(type)) })
-                        });
-            }
-            return base.EmulateType(type);
+            if (!IsJayType(type.CSharpTypeDefinition)) return base.EmulateType(type);
+
+            var originalOOPEmulation = base.EmulateType(type);
+
+            var phases = new List<TypeOOPEmulationPhase>(originalOOPEmulation.Phases);
+            var constructorMethodName = "$" + type.CSharpTypeDefinition.FullName.Replace('.', '_') + "$JayDataConstructor";
+
+            var assignToFactory = JsStatement.Var(constructorMethodName, GenerateJayInitCall(type));
+
+            var statements = new List<JsStatement>(phases[0].Statements);
+            statements.Insert(1, assignToFactory);
+
+
+            phases.Insert(1, new TypeOOPEmulationPhase(
+                        type.CSharpTypeDefinition.GetAllBaseTypeDefinitions().Where(x => !x.Equals(type.CSharpTypeDefinition)), 
+                        statements));
+            phases.RemoveAt(0);
+
+            return new TypeOOPEmulation(phases);
+
+
+            //if (IsJayType(type.CSharpTypeDefinition))
+            //{
+            //    return new TypeOOPEmulation(
+            //        new[]
+            //            {
+            //                new TypeOOPEmulationPhase(
+            //                    type.CSharpTypeDefinition.GetAllBaseTypeDefinitions()
+            //                        .Where(x => !x.Equals(type.CSharpTypeDefinition)), new JsStatement[] {JsStatement.Var(), JsExpression.Assign(new JsTypeReferenceExpression(type.CSharpTypeDefinition), GenerateJayInitCall(type)) })
+            //            });
+            //}
+            //return 
         }
 
         private bool IsJayType(ITypeDefinition type)
