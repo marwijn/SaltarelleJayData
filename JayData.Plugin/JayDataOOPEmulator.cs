@@ -43,19 +43,6 @@ namespace JayData.Plugin
             phases.RemoveAt(0);
 
             return new TypeOOPEmulation(phases);
-
-
-            //if (IsJayType(type.CSharpTypeDefinition))
-            //{
-            //    return new TypeOOPEmulation(
-            //        new[]
-            //            {
-            //                new TypeOOPEmulationPhase(
-            //                    type.CSharpTypeDefinition.GetAllBaseTypeDefinitions()
-            //                        .Where(x => !x.Equals(type.CSharpTypeDefinition)), new JsStatement[] {JsStatement.Var(), JsExpression.Assign(new JsTypeReferenceExpression(type.CSharpTypeDefinition), GenerateJayInitCall(type)) })
-            //            });
-            //}
-            //return 
         }
 
         private bool IsJayType(ITypeDefinition type)
@@ -112,7 +99,7 @@ namespace JayData.Plugin
 
 
             return JsExpression.Invocation(
-                    JsExpression.Member(JsExpression.Member(JsExpression.Identifier("$data"), "EntityContext"), "extend"), parameters);
+                    JsExpression.Member(JsExpression.Member(JsExpression.Identifier("$data"), "Entity"), "extend"), parameters);
         }
     }
 }

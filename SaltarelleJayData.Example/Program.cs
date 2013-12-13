@@ -2,24 +2,18 @@
 
 namespace SaltarelleJayData.Example
 {
-    public class A
+    public class Database : EntityContext
     {
-        public A(int a)
+        public Database() : base ("db", "provider")
         {
-            AInt = a;
         }
 
-        public int AInt { get; set; }
+        public EntitySet<MyEntity> TheBs { get; set; }
     }
 
     [Entity]
-    public class B : A
+    public class MyEntity : Entity
     {
-        public B(int a, int b) : base(a)
-        {
-            BInt = b;
-        }
-
         public int BInt { get; set; }
     }
 
@@ -27,7 +21,8 @@ namespace SaltarelleJayData.Example
     {
         static void Main()
         {
-            var b = new B(2, 3);
+            var entity = new MyEntity();
+            var database = new Database();
         }
     }
 }

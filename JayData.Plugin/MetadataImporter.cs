@@ -49,7 +49,7 @@ namespace JayData.Plugin
                 }
             }
 
-            if (AttributeReader.HasAttribute<EntityAttribute>(type))
+            if (AttributeReader.HasAttribute<EntityContextAttribute>(type))
             {
 
                 foreach (var p in type.Properties.Where(p => IsAutoProperty(p) == true && p.FullName == "JayData.EntitySet"))
