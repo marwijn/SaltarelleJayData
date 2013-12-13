@@ -93,6 +93,7 @@
     <Compile Include="..\JayData\Attributes.cs">
       <Link>Attributes.cs</Link>
     </Compile>
+    <Compile Include="Helpers.cs" />
     <Compile Include="JayDataOOPEmulator.cs" />
     <Compile Include="MetadataImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

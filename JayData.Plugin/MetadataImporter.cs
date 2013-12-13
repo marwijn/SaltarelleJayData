@@ -29,20 +29,12 @@ namespace JayData.Plugin
             _minimizeNames = options.MinimizeScript;
         }
 
-
-        private bool? IsAutoProperty(IProperty property)
-        {
-            if (property.Region == default(DomRegion))
-                return null;
-            return property.Getter != null && property.Setter != null && property.Getter.BodyRegion == default(DomRegion) && property.Setter.BodyRegion == default(DomRegion);
-        }
-
         public override void Prepare(ITypeDefinition type)
         {
             if (AttributeReader.HasAttribute<EntityAttribute>(type))
             {
 
-                foreach (var p in type.Properties.Where(p => IsAutoProperty(p) == true))
+                foreach (var p in type.Properties.Where(Helpers.IsEntityProperty))
                 {
                     base.ReserveMemberName(p.DeclaringTypeDefinition, p.Name, false);
                     base.SetPropertySemantics(p, PropertyScriptSemantics.Field(p.Name));
@@ -52,7 +44,7 @@ namespace JayData.Plugin
             if (AttributeReader.HasAttribute<EntityContextAttribute>(type))
             {
 
-                foreach (var p in type.Properties.Where(p => IsAutoProperty(p) == true && p.FullName == "JayData.EntitySet"))
+                foreach (var p in type.Properties.Where(Helpers.IsEntityContextProperty))
                 {
                     base.ReserveMemberName(p.DeclaringTypeDefinition, p.Name, false);
                     base.SetPropertySemantics(p, PropertyScriptSemantics.Field(p.Name));
@@ -97,6 +89,24 @@ namespace JayData.Plugin
                 newClazz.UnnamedConstructor = JsExpression.FunctionDefinition(
                     clazz.UnnamedConstructor.ParameterNames, JsStatement.Block(statements), clazz.UnnamedConstructor.Name);
                 
+                return newClazz;
+            }
+
+            if (AttributeReader.HasAttribute<EntityContextAttribute>(clazz.CSharpTypeDefinition.Attributes))
+            {
+                var newClazz = clazz.Clone();
+
+                var statements = new List<JsStatement>(clazz.UnnamedConstructor.Body.Statements);
+
+                var constructorMethodName = "$" + type.CSharpTypeDefinition.FullName.Replace('.', '_') + "$JayDataConstructor";
+
+                var callJayDataConstructor = JsExpression.Invocation(JsExpression.Member(JsExpression.Identifier(constructorMethodName), "call"), JsExpression.This, JsExpression.Member(JsExpression.This, "$JayDataConstructorArgument"));
+
+                statements.Add(callJayDataConstructor);
+
+                newClazz.UnnamedConstructor = JsExpression.FunctionDefinition(
+                    clazz.UnnamedConstructor.ParameterNames, JsStatement.Block(statements), clazz.UnnamedConstructor.Name);
+
                 return newClazz;
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ICSharpCode.NRefactory.TypeSystem;
 using JayDataApi;
@@ -24,45 +25,45 @@ namespace JayData.Plugin
 
         public override TypeOOPEmulation EmulateType(JsType type)
         {
-            if (!IsJayType(type.CSharpTypeDefinition)) return base.EmulateType(type);
+            if (Helpers.IsEntityType(type.CSharpTypeDefinition)) return EmulateJayDataType(type, GenerateJayEntityInitCall);
+            if (Helpers.IsEnityContextType(type.CSharpTypeDefinition)) return EmulateJayDataType(type, GenerateJayEntityContextInitCall);
+            return base.EmulateType(type);
+        }
 
+        private TypeOOPEmulation EmulateJayDataType(JsType type, Func<JsType, JsExpression> initCallGenerator)
+        {
             var originalOOPEmulation = base.EmulateType(type);
 
             var phases = new List<TypeOOPEmulationPhase>(originalOOPEmulation.Phases);
             var constructorMethodName = "$" + type.CSharpTypeDefinition.FullName.Replace('.', '_') + "$JayDataConstructor";
 
-            var assignToFactory = JsStatement.Var(constructorMethodName, GenerateJayInitCall(type));
+            var assignToFactory = JsStatement.Var(constructorMethodName, initCallGenerator(type));
 
             var statements = new List<JsStatement>(phases[0].Statements);
             statements.Insert(1, assignToFactory);
 
 
             phases.Insert(1, new TypeOOPEmulationPhase(
-                        type.CSharpTypeDefinition.GetAllBaseTypeDefinitions().Where(x => !x.Equals(type.CSharpTypeDefinition)), 
-                        statements));
+                                 type.CSharpTypeDefinition.GetAllBaseTypeDefinitions()
+                                     .Where(x => !x.Equals(type.CSharpTypeDefinition)),
+                                 statements));
             phases.RemoveAt(0);
 
             return new TypeOOPEmulation(phases);
         }
 
-        private bool IsJayType(ITypeDefinition type)
-        {
-            return 
-                AttributeReader.HasAttribute<EntityAttribute>(type.Attributes) || AttributeReader.HasAttribute<EntityContextAttribute>(type.Attributes);
-        }
+       
 
-        private JsExpression GenerateJayInitCall(JsType type)
+        private JsExpression GenerateJayEntityInitCall(JsType type)
         {
             var clazz = type as JsClass;
             if (clazz == null) return null;
-
-            clazz = clazz.Clone();
 
 	        var parameters = new List<JsExpression>();
 	        var propertyDefinitions = JsExpression.String(clazz.CSharpTypeDefinition.FullName);
 	        var propertyInitializerList = new List<JsObjectLiteralProperty>();
 
-	        foreach (var property in clazz.CSharpTypeDefinition.Properties)
+	        foreach (var property in clazz.CSharpTypeDefinition.Properties.Where(Helpers.IsEntityProperty))
 	        {
 	            var mappedType = _typeMapping.ContainsKey(property.ReturnType.FullName)
 	                                 ? _typeMapping[property.ReturnType.FullName]
@@ -101,5 +102,29 @@ namespace JayData.Plugin
             return JsExpression.Invocation(
                     JsExpression.Member(JsExpression.Member(JsExpression.Identifier("$data"), "Entity"), "extend"), parameters);
         }
+
+        private JsExpression GenerateJayEntityContextInitCall(JsType type)
+        {
+            var clazz = type as JsClass;
+            if (clazz == null) return null;
+
+            var propertyInitializerList = new List<JsObjectLiteralProperty>();
+
+            foreach (var property in clazz.CSharpTypeDefinition.Properties.Where(Helpers.IsEntityContextProperty))
+            {
+                var initializers = new List<JsObjectLiteralProperty>();
+                var typeInitializer = new JsObjectLiteralProperty("type", JsExpression.String("$data.EntitySet"));
+                initializers.Add(typeInitializer);
+                var elementName = property.ReturnType.TypeArguments[0].FullName;
+                initializers.Add(new JsObjectLiteralProperty("elementType", JsExpression.String(elementName)));
+
+                propertyInitializerList.Add(new JsObjectLiteralProperty(property.Name,
+                                                                        JsExpression.ObjectLiteral(initializers.ToArray())));
+            }
+
+            return JsExpression.Invocation(
+                    JsExpression.Member(JsExpression.Member(JsExpression.Identifier("$data"), "EntityContext"), "extend"), JsExpression.ObjectLiteral(propertyInitializerList));
+        }
+
     }
 }
