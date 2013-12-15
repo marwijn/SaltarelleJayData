@@ -35,24 +35,41 @@ namespace JayData.Plugin
             var originalOOPEmulation = base.EmulateType(type);
 
             var phases = new List<TypeOOPEmulationPhase>(originalOOPEmulation.Phases);
-            var constructorMethodName = "$" + type.CSharpTypeDefinition.FullName.Replace('.', '_') + "$JayDataConstructor";
 
-            var assignToFactory = JsStatement.Var(constructorMethodName, initCallGenerator(type));
+            var jayDataConstructor = JsExpression.Assign(
+                JsExpression.Member(new JsTypeReferenceExpression(type.CSharpTypeDefinition),"$jayDataConstructor"),
+                initCallGenerator(type));
+
 
             var statements = new List<JsStatement>(phases[0].Statements);
-            statements.Insert(1, assignToFactory);
+            statements.Insert(2, jayDataConstructor);
 
+            statements.Insert(0, JsStatement.Comment("Hello there"))
+            ;
 
-            phases.Insert(1, new TypeOOPEmulationPhase(
-                                 type.CSharpTypeDefinition.GetAllBaseTypeDefinitions()
-                                     .Where(x => !x.Equals(type.CSharpTypeDefinition)),
-                                 statements));
+            phases.Insert(1, new TypeOOPEmulationPhase(GetDependentTypes(type), statements));
             phases.RemoveAt(0);
 
             return new TypeOOPEmulation(phases);
         }
 
-       
+        IEnumerable<ITypeDefinition> GetDependentTypes(JsType type)
+        {
+            throw new Exception(type.CSharpTypeDefinition.FullName);
+            var dependencies = new List<ITypeDefinition>();
+            foreach (var property in type.CSharpTypeDefinition.Properties.Where(Helpers.IsEntityContextProperty))
+            {
+                throw new Exception("test");
+                if (property.ReturnType.FullName=="JayDataApi.EntitySet")
+                {
+                    
+                    dependencies.Add(property.ReturnType.TypeArguments[0].GetDefinition());
+                }
+            }
+            dependencies.AddRange(type.CSharpTypeDefinition.GetAllBaseTypeDefinitions()
+                                     .Where(x => !x.Equals(type.CSharpTypeDefinition)));
+            return dependencies;
+        }
 
         private JsExpression GenerateJayEntityInitCall(JsType type)
         {
@@ -123,7 +140,7 @@ namespace JayData.Plugin
             }
 
             return JsExpression.Invocation(
-                    JsExpression.Member(JsExpression.Member(JsExpression.Identifier("$data"), "EntityContext"), "extend"), JsExpression.ObjectLiteral(propertyInitializerList));
+                    JsExpression.Member(JsExpression.Member(JsExpression.Identifier("$data"), "EntityContext"), "extend"),JsExpression.String(type.CSharpTypeDefinition.FullName) ,  JsExpression.ObjectLiteral(propertyInitializerList));
         }
 
     }

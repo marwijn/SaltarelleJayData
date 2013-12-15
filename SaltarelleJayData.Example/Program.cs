@@ -2,9 +2,11 @@
 
 namespace SaltarelleJayData.Example
 {
+    [EntityContext]
     public class Database : EntityContext
     {
-        public Database() : base ("db", "provider")
+        public Database()
+            : base("TEST")
         {
         }
 

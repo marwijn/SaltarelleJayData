@@ -1,17 +1,18 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace JayDataApi
 {
-    public class EntityContext
+    public abstract class EntityContext
     {
-        public EntityContext(string database, string provider)
+        protected EntityContext(string database)
         {
-           InitJayDataConstructorArgument(database, provider); 
+            InitJayData(database);
         }
 
-        [InlineCode("TESTTESTTEST")]
-        public void InitJayDataConstructorArgument(string database, string provider)
+        [InlineCode("{this}.$jayDataObject = new {this}.constructor.$jayDataConstructor({database});")]
+        private void InitJayData(string database)
         {
         }
 
