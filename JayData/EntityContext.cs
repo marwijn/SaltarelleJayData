@@ -16,9 +16,15 @@ namespace JayDataApi
         {
         }
 
+        private object JayDataObject
+        {
+            [InlineCode("{this}.$jayDataObject")]
+            get { return null; }
+        }
+
         public Task Ready()
         {
-            return Task.FromDoneCallback(this, "onReady", new object[0]);
+            return Task.FromDoneCallback(JayDataObject, "onReady", new object[0]);
         }
     }
 }

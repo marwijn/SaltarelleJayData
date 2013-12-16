@@ -49,7 +49,7 @@
     </Reference>
     <Reference Include="Saltarelle.JayData, Version=0.0.0.0, Culture=neutral, PublicKeyToken=a4048e8fcc593f14, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Saltarelle.JayData.2.2.4.15\lib\Saltarelle.JayData.dll</HintPath>
+      <HintPath>..\packages\Saltarelle.JayData.2.2.4.18\lib\Saltarelle.JayData.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="!Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.4.0.6\tools\Saltarelle.Compiler.targets')" />
