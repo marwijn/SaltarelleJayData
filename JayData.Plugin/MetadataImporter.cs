@@ -36,7 +36,12 @@ namespace JayData.Plugin
                 foreach (var p in type.Properties.Where(Helpers.IsEntityProperty))
                 {
                     base.ReserveMemberName(p.DeclaringTypeDefinition, p.Name, false);
-                    base.SetPropertySemantics(p, PropertyScriptSemantics.Field(p.Name));
+                    //base.SetPropertySemantics(p, PropertyScriptSemantics.GetAndSetMethods(
+                    //    MethodScriptSemantics.InlineCode("this.jayDataObject." + p.Name + "  = {value}"),
+                    //    MethodScriptSemantics.InlineCode("this.jayDataObject." + p.Name)));
+                    //base.SetMethodSemantics(p.Setter, MethodScriptSemantics.InlineCode("{this}.$JayDataObject." + p.Name + "  = {value}"));
+                    //base.SetMethodSemantics(p.Getter, MethodScriptSemantics.InlineCode("{this}.$JayDataObject." + p.Name));
+
                 }
             }
 
@@ -46,7 +51,8 @@ namespace JayData.Plugin
                 foreach (var p in type.Properties.Where(Helpers.IsEntityContextProperty))
                 {
                     base.ReserveMemberName(p.DeclaringTypeDefinition, p.Name, false);
-                    base.SetPropertySemantics(p, PropertyScriptSemantics.Field(p.Name));
+                    base.SetMethodSemantics(p.Setter, MethodScriptSemantics.InlineCode("{this}.$JayDataObject." + p.Name + "  = {value}"));
+                    base.SetMethodSemantics(p.Getter, MethodScriptSemantics.InlineCode("{this}.$JayDataObject." + p.Name));
                 }
             }
             base.Prepare(type);

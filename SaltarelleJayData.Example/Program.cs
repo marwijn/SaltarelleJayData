@@ -1,4 +1,5 @@
-﻿using JayDataApi;
+﻿using System.Runtime.CompilerServices;
+using JayDataApi;
 
 namespace SaltarelleJayData.Example
 {
@@ -10,13 +11,24 @@ namespace SaltarelleJayData.Example
         {
         }
 
-        public EntitySet<MyEntity> TheBs { get; set; }
+        public EntitySet<MyEntity> TheBs
+        {
+            [InlineCode("{this}.$JayDataObject.TheBs")]
+            get { return null; }
+            [InlineCode("{this}.$JayDataObject.BInt = {value}")]
+            set { }
+        }
     }
 
     [Entity]
     public class MyEntity : Entity
     {
-        public int BInt { get; set; }
+        public int BInt
+        {
+            // [InlineCode("{this}.$JayDataObject.BInt")]
+            get;
+            // [InlineCode("{this}.$JayDataObject.BInt = {value}")]
+            set; }
     }
 
     class Program
@@ -24,7 +36,9 @@ namespace SaltarelleJayData.Example
         static void Main()
         {
             var entity = new MyEntity();
+            entity.BInt = 7;
             var database = new Database();
+            var test = database.TheBs;
         }
     }
 }

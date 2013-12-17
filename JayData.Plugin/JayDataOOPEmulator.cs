@@ -44,9 +44,6 @@ namespace JayData.Plugin
             var statements = new List<JsStatement>(phases[0].Statements);
             statements.Insert(2, jayDataConstructor);
 
-            statements.Insert(0, JsStatement.Comment("Hello there"))
-            ;
-
             phases.Insert(1, new TypeOOPEmulationPhase(GetDependentTypes(type), statements));
             phases.RemoveAt(0);
 
@@ -55,19 +52,8 @@ namespace JayData.Plugin
 
         IEnumerable<ITypeDefinition> GetDependentTypes(JsType type)
         {
-            throw new Exception(type.CSharpTypeDefinition.FullName);
-            var dependencies = new List<ITypeDefinition>();
-            foreach (var property in type.CSharpTypeDefinition.Properties.Where(Helpers.IsEntityContextProperty))
-            {
-                throw new Exception("test");
-                if (property.ReturnType.FullName=="JayDataApi.EntitySet")
-                {
-                    
-                    dependencies.Add(property.ReturnType.TypeArguments[0].GetDefinition());
-                }
-            }
-            dependencies.AddRange(type.CSharpTypeDefinition.GetAllBaseTypeDefinitions()
-                                     .Where(x => !x.Equals(type.CSharpTypeDefinition)));
+            var dependencies = type.CSharpTypeDefinition.Properties.Where(Helpers.IsEntityContextProperty).Select(property => property.ReturnType.TypeArguments[0].GetDefinition()).ToList();
+            dependencies.AddRange(type.CSharpTypeDefinition.GetAllBaseTypeDefinitions().Where(x => !x.Equals(type.CSharpTypeDefinition)));
             return dependencies;
         }
 

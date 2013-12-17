@@ -12,7 +12,7 @@ namespace JayDataApi
            InitJayData();
         }
 
-        [InlineCode("{this}.$jayDataObject = new {this}.constructor.$jayDataConstructor();")]
+        [InlineCode("{this}.jayDataObject = new {this}.constructor.jayDataConstructor();")]
         private void InitJayData()
         {
         }
