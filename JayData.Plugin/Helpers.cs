@@ -24,7 +24,7 @@ namespace JayData.Plugin
 
         public static bool IsEntityContextProperty(IProperty property)
         {
-            return IsAutoProperty(property) && property.FullName == "JayData.EntitySet";
+            return IsAutoProperty(property) && property.ReturnType.FullName == "JayDataApi.EntitySet";
         }
 
         private static bool IsAutoProperty(IProperty property)

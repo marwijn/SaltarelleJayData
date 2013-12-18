@@ -24,7 +24,9 @@ namespace SaltarelleJayData.Example
         static void Main()
         {
             var entity = new MyEntity();
+            entity.BInt = 5;
             var database = new Database();
+            var x = database.TheBs;
         }
     }
 }

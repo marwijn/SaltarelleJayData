@@ -45,13 +45,20 @@ namespace JayData.Plugin
 
             if (AttributeReader.HasAttribute<EntityContextAttribute>(type))
             {
-                foreach (var property in type.Properties.Where(Helpers.IsEntityContextProperty))
+                foreach (var property in type.Properties)
                 {
-                    base.SetPropertySemantics(property,
-                          PropertyScriptSemantics.GetAndSetMethods(
-                              MethodScriptSemantics.InlineCode("{this}.jayDataObject." + property.Name),
-                              MethodScriptSemantics.InlineCode("{this}.jayDataObject." + property.Name + "={value}")
-                          ));
+                    _errorReporter.Message(MessageSeverity.Warning, 0, String.Format("Property on EntityContext {0} {1}",  property.Name, property.ReturnType.FullName));
+                    if (Helpers.IsEntityContextProperty(property))
+                    {
+                        _errorReporter.Message(MessageSeverity.Warning, 0, String.Format("Property processed on EntityContext {0}", property.Name));
+                        base.SetPropertySemantics(property,
+                                                  PropertyScriptSemantics.GetAndSetMethods(
+                                                      MethodScriptSemantics.InlineCode("{this}.jayDataObject." +
+                                                                                       property.Name),
+                                                      MethodScriptSemantics.InlineCode("{this}.jayDataObject." +
+                                                                                       property.Name + "={value}")
+                                                      ));
+                    }
                 }
             }
             base.Prepare(type);
