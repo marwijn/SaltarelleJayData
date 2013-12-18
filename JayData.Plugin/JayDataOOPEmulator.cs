@@ -37,7 +37,7 @@ namespace JayData.Plugin
             var phases = new List<TypeOOPEmulationPhase>(originalOOPEmulation.Phases);
 
             var jayDataConstructor = JsExpression.Assign(
-                JsExpression.Member(new JsTypeReferenceExpression(type.CSharpTypeDefinition),"$jayDataConstructor"),
+                JsExpression.Member(new JsTypeReferenceExpression(type.CSharpTypeDefinition),"jayDataConstructor"),
                 initCallGenerator(type));
 
 
@@ -52,10 +52,9 @@ namespace JayData.Plugin
 
         IEnumerable<ITypeDefinition> GetDependentTypes(JsType type)
         {
-            return new List<ITypeDefinition>();
-            //var dependencies = type.CSharpTypeDefinition.Properties.Where(Helpers.IsEntityContextProperty).Select(property => property.ReturnType.TypeArguments[0].GetDefinition()).ToList();
-            //dependencies.AddRange(type.CSharpTypeDefinition.GetAllBaseTypeDefinitions().Where(x => !x.Equals(type.CSharpTypeDefinition)));
-            //return dependencies;
+            var dependencies = type.CSharpTypeDefinition.Properties.Where(Helpers.IsEntityContextProperty).Select(property => property.ReturnType.TypeArguments[0].GetDefinition()).ToList();
+            dependencies.AddRange(type.CSharpTypeDefinition.GetAllBaseTypeDefinitions().Where(x => !x.Equals(type.CSharpTypeDefinition)));
+            return dependencies;
         }
 
         private JsExpression GenerateJayEntityInitCall(JsType type)

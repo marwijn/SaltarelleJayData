@@ -11,14 +11,14 @@ namespace JayDataApi
             InitJayData(database);
         }
 
-        [InlineCode("{this}.$jayDataObject = new {this}.constructor.$jayDataConstructor({database});")]
+        [InlineCode("{this}.jayDataObject = new {this}.constructor.jayDataConstructor({database});")]
         private void InitJayData(string database)
         {
         }
 
-        private object JayDataObject
+        private dynamic JayDataObject
         {
-            [InlineCode("{this}.$jayDataObject")]
+            [InlineCode("{this}.jayDataObject")]
             get { return null; }
         }
 

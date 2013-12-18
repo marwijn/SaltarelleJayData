@@ -33,22 +33,25 @@ namespace JayData.Plugin
         {
             if (AttributeReader.HasAttribute<EntityAttribute>(type))
             {
-                foreach (var p in type.Properties.Where(Helpers.IsEntityProperty))
+                foreach (var property in type.Properties.Where(Helpers.IsEntityProperty))
                 {
-                    base.ReserveMemberName(p.DeclaringTypeDefinition, p.Name, false);
-                    base.SetMethodSemantics(p.Setter, MethodScriptSemantics.InlineCode("{this}.$JayDataObject." + p.Name + "  = {value}"));
-                    base.SetMethodSemantics(p.Getter, MethodScriptSemantics.InlineCode("{this}.$JayDataObject." + p.Name));
+                    base.SetPropertySemantics(property, 
+                        PropertyScriptSemantics.GetAndSetMethods(
+                            MethodScriptSemantics.InlineCode("{this}.jayDataObject." + property.Name),
+                            MethodScriptSemantics.InlineCode("{this}.jayDataObject." + property.Name + "={value}")
+                        ));
                 }
             }
 
             if (AttributeReader.HasAttribute<EntityContextAttribute>(type))
             {
-
-                foreach (var p in type.Properties.Where(Helpers.IsEntityContextProperty))
+                foreach (var property in type.Properties.Where(Helpers.IsEntityContextProperty))
                 {
-                    base.ReserveMemberName(p.DeclaringTypeDefinition, p.Name, false);
-                    base.SetMethodSemantics(p.Setter, MethodScriptSemantics.InlineCode("{this}.$JayDataObject." + p.Name + "  = {value}"));
-                    base.SetMethodSemantics(p.Getter, MethodScriptSemantics.InlineCode("{this}.$JayDataObject." + p.Name));
+                    base.SetPropertySemantics(property,
+                          PropertyScriptSemantics.GetAndSetMethods(
+                              MethodScriptSemantics.InlineCode("{this}.jayDataObject." + property.Name),
+                              MethodScriptSemantics.InlineCode("{this}.jayDataObject." + property.Name + "={value}")
+                          ));
                 }
             }
             base.Prepare(type);
