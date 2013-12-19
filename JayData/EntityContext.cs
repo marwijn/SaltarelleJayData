@@ -11,20 +11,14 @@ namespace JayDataApi
             InitJayData(database);
         }
 
-        [InlineCode("{this}.jayDataObject = new {this}.constructor.jayDataConstructor({database});")]
+        [InlineCode("{this}.$jayDataObject = new {this}.constructor.$jayDataConstructor({database});")]
         private void InitJayData(string database)
         {
         }
 
-        public dynamic JayDataObject
-        {
-            [InlineCode("{this}.jayDataObject")]
-            get { return null; }
-        }
-
         public Task Ready()
         {
-            return Task.FromDoneCallback(JayDataObject, "onReady", new object[0]);
+            return Task.FromDoneCallback(this, "onReady", new object[0]);
         }
     }
 }
