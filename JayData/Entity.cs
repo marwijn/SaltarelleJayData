@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Runtime.CompilerServices;
 
 namespace JayDataApi
 {
@@ -12,7 +9,7 @@ namespace JayDataApi
            InitJayData();
         }
 
-        [InlineCode("{this}.$jayDataObject = new {this}.constructor.$jayDataConstructor();")]
+        [InlineCode("{this}.jayDataObject = new {this}.constructor.jayDataConstructor();")]
         private void InitJayData()
         {
         }
