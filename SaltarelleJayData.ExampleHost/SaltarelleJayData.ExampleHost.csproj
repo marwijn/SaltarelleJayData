@@ -20,7 +20,7 @@
     <Content Include="default.htm" />
     <Content Include="mscorlib.js" />
     <Content Include="Saltarelle.JayData.js" />
-    <Content Include="test.js" />
+    <Content Include="SaltarelleJayData.Example.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="web.config" />

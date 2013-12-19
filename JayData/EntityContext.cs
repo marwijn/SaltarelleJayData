@@ -26,5 +26,11 @@ namespace JayDataApi
         {
             return Task.FromDoneCallback(JayDataObject, "onReady");
         }
+
+        public Task SaveChanges()
+        {
+            //return Task.FromPromise(JayDataObject.saveChanges());
+           return Task.FromDoneCallback(JayDataObject, "saveChanges");
+        }
     }
 }

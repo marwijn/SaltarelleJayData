@@ -23,6 +23,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaltarelleJayData.Example", "SaltarelleJayData.Example\SaltarelleJayData.Example.csproj", "{C1CEF22F-51AF-47C2-ABF1-87262CF8D848}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaltarelleJayData.ExampleHost", "SaltarelleJayData.ExampleHost\SaltarelleJayData.ExampleHost.csproj", "{9EB5DF56-6911-4E0C-9B43-CB739F5783F7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C1CEF22F-51AF-47C2-ABF1-87262CF8D848} = {C1CEF22F-51AF-47C2-ABF1-87262CF8D848}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
