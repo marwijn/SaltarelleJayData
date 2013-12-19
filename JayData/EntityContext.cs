@@ -24,7 +24,7 @@ namespace JayDataApi
 
         public Task Ready()
         {
-            return Task.FromDoneCallback(JayDataObject, "onReady", new object[0]);
+            return Task.FromDoneCallback(JayDataObject, "onReady");
         }
     }
 }

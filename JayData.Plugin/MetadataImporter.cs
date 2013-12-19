@@ -8,6 +8,7 @@ using Saltarelle.Compiler;
 using Saltarelle.Compiler.Compiler;
 using Saltarelle.Compiler.Decorators;
 using Saltarelle.Compiler.JSModel.Expressions;
+using Saltarelle.Compiler.JSModel.Statements;
 using Saltarelle.Compiler.JSModel.TypeSystem;
 using Saltarelle.Compiler.ScriptSemantics;
 
@@ -33,35 +34,44 @@ namespace JayData.Plugin
         {
             if (AttributeReader.HasAttribute<EntityAttribute>(type))
             {
-                foreach (var property in type.Properties.Where(Helpers.IsEntityProperty))
-                {
-                    base.SetPropertySemantics(property, 
-                        PropertyScriptSemantics.GetAndSetMethods(
-                            MethodScriptSemantics.InlineCode("{this}.jayDataObject." + property.Name),
-                            MethodScriptSemantics.InlineCode("{this}.jayDataObject." + property.Name + "={value}")
-                        ));
-                }
+                PrepareEntity(type);
             }
 
             if (AttributeReader.HasAttribute<EntityContextAttribute>(type))
             {
-                foreach (var property in type.Properties)
-                {
-                    _errorReporter.Message(MessageSeverity.Warning, 0, String.Format("Property on EntityContext {0} {1}",  property.Name, property.ReturnType.FullName));
-                    if (Helpers.IsEntityContextProperty(property))
-                    {
-                        _errorReporter.Message(MessageSeverity.Warning, 0, String.Format("Property processed on EntityContext {0}", property.Name));
-                        base.SetPropertySemantics(property,
-                                                  PropertyScriptSemantics.GetAndSetMethods(
-                                                      MethodScriptSemantics.InlineCode("{this}.jayDataObject." +
-                                                                                       property.Name),
-                                                      MethodScriptSemantics.InlineCode("{this}.jayDataObject." +
-                                                                                       property.Name + "={value}")
-                                                      ));
-                    }
-                }
+                PrepareEntityContext(type);
             }
             base.Prepare(type);
+        }
+
+        private void PrepareEntityContext(ITypeDefinition type)
+        {
+            foreach (var property in type.Properties)
+            {
+                if (Helpers.IsEntityContextProperty(property))
+                {
+                    base.SetPropertySemantics(property,
+                                              PropertyScriptSemantics.GetAndSetMethods(
+                                                  MethodScriptSemantics.InlineCode("{this}.jayDataObject." +
+                                                                                   property.Name),
+                                                  MethodScriptSemantics.InlineCode("{this}.jayDataObject." +
+                                                                                   property.Name + "={value}")
+                                                  ));
+                }
+            }
+        }
+
+        private void PrepareEntity(ITypeDefinition type)
+        {
+            foreach (var property in type.Properties.Where(Helpers.IsEntityProperty))
+            {
+                base.SetPropertySemantics(property,
+                                          PropertyScriptSemantics.GetAndSetMethods(
+                                              MethodScriptSemantics.InlineCode("{this}.jayDataObject." + property.Name),
+                                              MethodScriptSemantics.InlineCode("{this}.jayDataObject." + property.Name +
+                                                                               "={value}")
+                                              ));
+            }
         }
 
         public JsExpression ResolveTypeParameter(ITypeParameter tp)
@@ -78,7 +88,7 @@ namespace JayData.Plugin
         public IEnumerable<JsType> Rewrite(IEnumerable<JsType> types)
         {
             return types;
-            // return types.Select(Rewrite);
+           // return types.Select(Rewrite);
         }
 
         //private JsType Rewrite(JsType type)
@@ -86,29 +96,21 @@ namespace JayData.Plugin
         //    var clazz = type as JsClass;
         //    if (clazz == null) return type;
 
-        //    if (AttributeReader.HasAttribute<EntityAttribute>(clazz.CSharpTypeDefinition.Attributes))
-        //    {
-        //        var newClazz = clazz.Clone();
-
-        //        var statements = new List<JsStatement> (clazz.UnnamedConstructor.Body.Statements);
-
-        //       var constructorMethodName = "$" + type.CSharpTypeDefinition.FullName.Replace('.', '_') + "$JayDataConstructor";
-
-        //        var callJayDataConstructor = JsExpression.Invocation(JsExpression.Member(JsExpression.Identifier(constructorMethodName), "call"), JsExpression.This);
-
-        //        statements.Add(callJayDataConstructor);
-
-        //        newClazz.UnnamedConstructor = JsExpression.FunctionDefinition(
-        //            clazz.UnnamedConstructor.ParameterNames, JsStatement.Block(statements), clazz.UnnamedConstructor.Name);
-                
-        //        return newClazz;
-        //    }
-
         //    if (AttributeReader.HasAttribute<EntityContextAttribute>(clazz.CSharpTypeDefinition.Attributes))
         //    {
         //        var newClazz = clazz.Clone();
-
         //        var statements = new List<JsStatement>(clazz.UnnamedConstructor.Body.Statements);
+
+        //        foreach (var property in clazz.CSharpTypeDefinition.Properties.Where(Helpers.IsEntityContextProperty))
+        //        {
+        //            var constructorMethod = property.ReturnType.GetDefinition().GetConstructors().First();
+                
+
+
+
+
+
+
 
         //        var constructorMethodName = "$" + type.CSharpTypeDefinition.FullName.Replace('.', '_') + "$JayDataConstructor";
 
