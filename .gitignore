@@ -1,7 +1,6 @@
 bin
 obj
-Knockout.v11.suo
+*.suo
+*.user
 Knockout/Properties/Version.cs
-Knockout.Plugin/Knockout.Plugin.csproj.user
-Knockout.sln.DotSettings.user
 _ReSharper.*
