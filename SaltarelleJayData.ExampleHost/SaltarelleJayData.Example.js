@@ -13,7 +13,7 @@
 		$($SaltarelleJayData_Example_$Program.$run);
 	};
 	$SaltarelleJayData_Example_$Program.$run = function() {
-		var $state = 0, entity, database, $t1, $t2, $t3, entities;
+		var $state = 0, entity, database, $t1, $t2, $t3, entities, z, x, y;
 		var $sm = function() {
 			$sm1:
 			for (;;) {
@@ -47,7 +47,10 @@
 					case 3: {
 						$state = -1;
 						entities = $t3.getResult();
-						$('#content').html(ss.count(entities).toString());
+						z = ss.count(entities);
+						x = 10;
+						y = z.toString();
+						$('#content').html(ss.getItem(entities, 0).toString());
 						$state = -1;
 						break $sm1;
 					}
@@ -71,6 +74,8 @@
 	// SaltarelleJayData.Example.Database
 	var $SaltarelleJayData_Example_Database = function() {
 		JayDataApi.EntityContext.call(this, 'TEST');
+		var self = this;
+		this.TheBs = new (ss.makeGenericType(JayDataApi.EntitySet$1, [$SaltarelleJayData_Example_MyEntity]))(self.jayDataObject.TheBs);
 		this.TheBs = new (ss.makeGenericType(JayDataApi.EntitySet$1, [$SaltarelleJayData_Example_MyEntity]))(this.jayDataObject.TheBs);
 	};
 	$SaltarelleJayData_Example_Database.jayDataConstructor = $data.EntityContext.extend('SaltarelleJayData.Example.Database', { TheBs: { type: '$data.EntitySet', elementType: 'SaltarelleJayData.Example.MyEntity' } });

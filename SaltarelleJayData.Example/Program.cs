@@ -44,7 +44,7 @@ namespace SaltarelleJayData.Example
              var x = 10;
              var y = z.ToString();
 
-            jQuery.Select("#content").Html(z.ToString());
+            jQuery.Select("#content").Html(entities[0].ToString());
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace JayDataApi
 {
-    public class EntitySet<T> where T : Entity
+    public class EntitySet<T> where T : Entity, new ()
     {
         public EntitySet(dynamic jayDataObject)
         {
@@ -21,7 +21,16 @@ namespace JayDataApi
 
         public Task<IList<T>> ToList()
         {
-            return Task.FromDoneCallback<IList<T>>(JayDataObject, "toArray");
+            var jayDataTask = Task.FromDoneCallback<IList<object>>((object) JayDataObject, "toArray");
+            return jayDataTask.ContinueWith(task =>
+            {
+                IList<T> list = new List<T>();
+                foreach (var obj in task.Result)
+                {
+                    list.Add(Entity.Create<T>(obj));
+                }
+                return list;
+            });
         }
 
         [InlineCode("{this}.jayDataObject.add({entity}.jayDataObject)")]
