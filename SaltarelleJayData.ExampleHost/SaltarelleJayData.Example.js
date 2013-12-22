@@ -13,7 +13,7 @@
 		$($SaltarelleJayData_Example_$Program.$run);
 	};
 	$SaltarelleJayData_Example_$Program.$run = function() {
-		var $state = 0, entity, database, $t1, $t2, $t3, entities, z, x, y;
+		var $state = 0, entity, database, $t1, $t2, $t3, entities, $t4, database2, $t5, $t6, entities2;
 		var $sm = function() {
 			$sm1:
 			for (;;) {
@@ -21,6 +21,7 @@
 					case 0: {
 						$state = -1;
 						entity = new $SaltarelleJayData_Example_MyEntity();
+						entity.jayDataObject.AnotherInt = 77;
 						database = new $SaltarelleJayData_Example_Database();
 						$t1 = database.ready();
 						$state = 1;
@@ -47,10 +48,35 @@
 					case 3: {
 						$state = -1;
 						entities = $t3.getResult();
-						z = ss.count(entities);
-						x = 10;
-						y = z.toString();
-						$('#content').html(ss.getItem(entities, 0).toString());
+						database.TheBs.jayDataObject.attach(ss.getItem(entities, 0).jayDataObject);
+						ss.getItem(entities, 0).jayDataObject.AnotherInt = 555;
+						ss.getItem(entities, 0).jayDataObject.BString = 'Hello world' + (new Date()).toLocaleTimeString();
+						$t4 = database.saveChanges();
+						$state = 4;
+						$t4.continueWith($sm);
+						return;
+					}
+					case 4: {
+						$state = -1;
+						$t4.getResult();
+						database2 = new $SaltarelleJayData_Example_Database();
+						$t5 = database2.ready();
+						$state = 5;
+						$t5.continueWith($sm);
+						return;
+					}
+					case 5: {
+						$state = -1;
+						$t5.getResult();
+						$t6 = database2.TheBs.toList();
+						$state = 6;
+						$t6.continueWith($sm);
+						return;
+					}
+					case 6: {
+						$state = -1;
+						entities2 = $t6.getResult();
+						$('#content').html(ss.getItem(entities2, 0).toString());
 						$state = -1;
 						break $sm1;
 					}
@@ -67,13 +93,13 @@
 	var $SaltarelleJayData_Example_MyEntity = function() {
 		JayDataApi.Entity.call(this);
 	};
-	$SaltarelleJayData_Example_MyEntity.jayDataConstructor = $data.Entity.extend('SaltarelleJayData.Example.MyEntity', { BInt: { type: 'int', key: true, computed: true } });
+	$SaltarelleJayData_Example_MyEntity.jayDataConstructor = $data.Entity.extend('SaltarelleJayData.Example.MyEntity', { BInt: { type: 'int', key: true, computed: true }, AnotherInt: { type: 'int' }, BString: { type: 'string' } });
 	$SaltarelleJayData_Example_MyEntity.__typeName = 'SaltarelleJayData.Example.MyEntity';
 	global.SaltarelleJayData.Example.MyEntity = $SaltarelleJayData_Example_MyEntity;
 	////////////////////////////////////////////////////////////////////////////////
 	// SaltarelleJayData.Example.Database
 	var $SaltarelleJayData_Example_Database = function() {
-		JayDataApi.EntityContext.call(this, 'TEST');
+		JayDataApi.EntityContext.call(this, 'TEST3');
 		var self = this;
 		this.TheBs = new (ss.makeGenericType(JayDataApi.EntitySet$1, [$SaltarelleJayData_Example_MyEntity]))(self.jayDataObject.TheBs);
 		this.TheBs = new (ss.makeGenericType(JayDataApi.EntitySet$1, [$SaltarelleJayData_Example_MyEntity]))(this.jayDataObject.TheBs);

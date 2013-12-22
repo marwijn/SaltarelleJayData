@@ -37,5 +37,10 @@ namespace JayDataApi
         public void Add(T entity)
         {
         }
+
+        [InlineCode("{this}.jayDataObject.attach({entity}.jayDataObject)")]
+        public void Attach (T entity)
+        {
+        }
     }
 }
