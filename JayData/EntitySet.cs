@@ -42,5 +42,10 @@ namespace JayDataApi
         public void Attach (T entity)
         {
         }
+        
+        [InlineCode("{this}.jayDataObject.remove({entity}.jayDataObject)")]
+        public void Remove(T entity)
+        {
+        }
     }
 }

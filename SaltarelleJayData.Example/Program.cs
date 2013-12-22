@@ -42,14 +42,14 @@ namespace SaltarelleJayData.Example
              entity.AnotherInt = 77;
             var database = new Database();
             await database.Ready();
-            database.TheBs.Add(entity);
-            await database.SaveChanges();
+            //database.TheBs.Add(entity);
+            //await database.SaveChanges();
             var entities = await database.TheBs.ToList();
 
-             database.TheBs.Attach(entities[0]);
+             database.TheBs.Remove(entities[0]);
 
-             entities[0].AnotherInt= 555;
-             entities[0].BString = "Hello world" + DateTime.Now.ToLocaleTimeString();
+             //entities[0].AnotherInt= 555;
+             //entities[0].BString = "Hello world" + DateTime.Now.ToLocaleTimeString();
 
              await database.SaveChanges();
 
@@ -57,7 +57,7 @@ namespace SaltarelleJayData.Example
              await database2.Ready();
              var entities2 = await database2.TheBs.ToList();
 
-            jQuery.Select("#content").Html(entities2[0].ToString());
+            jQuery.Select("#content").Html(entities2.Count.ToString());
         }
     }
 }
