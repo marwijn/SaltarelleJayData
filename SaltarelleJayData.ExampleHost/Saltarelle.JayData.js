@@ -4,6 +4,40 @@
 	global.JayDataApi = global.JayDataApi || {};
 	ss.initAssembly($asm, 'Saltarelle.JayData');
 	////////////////////////////////////////////////////////////////////////////////
+	// JayDataApi.AsyncQueryable
+	var $JayDataApi_AsyncQueryable$1 = function(T) {
+		var $type = function(jayDataObject) {
+			this.jayDataObject = jayDataObject;
+		};
+		ss.registerGenericClassInstance($type, $JayDataApi_AsyncQueryable$1, [T], {
+			toList: function() {
+				var jayDataTask = ss.Task.fromDoneCallback(this.jayDataObject, 'toArray');
+				return jayDataTask.continueWith(function(task) {
+					var list = [];
+					var $t1 = ss.getEnumerator(task.getResult());
+					try {
+						while ($t1.moveNext()) {
+							var obj = $t1.current();
+							ss.add(list, $JayDataApi_Entity.$create(T).call(null, obj));
+						}
+					}
+					finally {
+						$t1.dispose();
+					}
+					return list;
+				});
+			}
+		}, function() {
+			return null;
+		}, function() {
+			return [];
+		});
+		return $type;
+	};
+	$JayDataApi_AsyncQueryable$1.__typeName = 'JayDataApi.AsyncQueryable$1';
+	ss.initGenericClass($JayDataApi_AsyncQueryable$1, $asm, 1);
+	global.JayDataApi.AsyncQueryable$1 = $JayDataApi_AsyncQueryable$1;
+	////////////////////////////////////////////////////////////////////////////////
 	// JayDataApi.ContextConfiguration
 	var $JayDataApi_ContextConfiguration = function() {
 		this.databaseName = null;
@@ -36,28 +70,10 @@
 	// JayDataApi.EntitySet
 	var $JayDataApi_EntitySet$1 = function(T) {
 		var $type = function(jayDataObject) {
-			this.jayDataObject = jayDataObject;
+			ss.makeGenericType($JayDataApi_AsyncQueryable$1, [T]).call(this, jayDataObject);
 		};
-		ss.registerGenericClassInstance($type, $JayDataApi_EntitySet$1, [T], {
-			toList: function() {
-				var jayDataTask = ss.Task.fromDoneCallback(this.jayDataObject, 'toArray');
-				return jayDataTask.continueWith(function(task) {
-					var list = [];
-					var $t1 = ss.getEnumerator(task.getResult());
-					try {
-						while ($t1.moveNext()) {
-							var obj = $t1.current();
-							ss.add(list, $JayDataApi_Entity.$create(T).call(null, obj));
-						}
-					}
-					finally {
-						$t1.dispose();
-					}
-					return list;
-				});
-			}
-		}, function() {
-			return null;
+		ss.registerGenericClassInstance($type, $JayDataApi_EntitySet$1, [T], {}, function() {
+			return ss.makeGenericType($JayDataApi_AsyncQueryable$1, [T]);
 		}, function() {
 			return [];
 		});

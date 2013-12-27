@@ -44,9 +44,13 @@ namespace SaltarelleJayData.Example
             await database.Ready();
             //database.TheBs.Add(entity);
             //await database.SaveChanges();
+
             var entities = await database.TheBs.ToList();
 
-             database.TheBs.Remove(entities[0]);
+            //x = await database.TheBs.Where(b => b.AnotherInt == 5).ToList();
+
+
+            
 
              //entities[0].AnotherInt= 555;
              //entities[0].BString = "Hello world" + DateTime.Now.ToLocaleTimeString();

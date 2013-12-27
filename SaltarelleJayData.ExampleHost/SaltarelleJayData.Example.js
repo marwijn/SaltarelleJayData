@@ -41,7 +41,7 @@
 					case 2: {
 						$state = -1;
 						entities = $t2.getResult();
-						database.TheBs.jayDataObject.remove(ss.getItem(entities, 0).jayDataObject);
+						//x = await database.TheBs.Where(b => b.AnotherInt == 5).ToList();
 						//entities[0].AnotherInt= 555;
 						//entities[0].BString = "Hello world" + DateTime.Now.ToLocaleTimeString();
 						$t3 = database.saveChanges();
