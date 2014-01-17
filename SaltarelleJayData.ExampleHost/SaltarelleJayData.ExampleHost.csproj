@@ -18,6 +18,10 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="default.htm" />
+    <Content Include="IndexedDbProvider.js" />
+    <Content Include="InMemoryProvider.js" />
+    <Content Include="jaydata.js" />
+    <Content Include="jquery.js" />
     <Content Include="mscorlib.js" />
     <Content Include="Saltarelle.JayData.js" />
     <Content Include="SaltarelleJayData.Example.js" />

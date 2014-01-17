@@ -13,7 +13,7 @@
 		$($SaltarelleJayData_Example_$Program.$run);
 	};
 	$SaltarelleJayData_Example_$Program.$run = function() {
-		var $state = 0, entity, database, $t1, $t2, entities, $t3, database2, $t4, $t5, entities2;
+		var $state = 0, entity, database, $t1, $t2, $t3, entities, $t4, database2, $t5, $t6, entities2;
 		var $sm = function() {
 			$sm1:
 			for (;;) {
@@ -31,29 +31,29 @@
 					case 1: {
 						$state = -1;
 						$t1.getResult();
-						//database.TheBs.Add(entity);
-						//await database.SaveChanges();
-						$t2 = database.TheBs.toList();
+						database.TheBs.jayDataObject.add(entity.jayDataObject);
+						$t2 = database.saveChanges();
 						$state = 2;
 						$t2.continueWith($sm);
 						return;
 					}
 					case 2: {
 						$state = -1;
-						entities = $t2.getResult();
-						//x = await database.TheBs.Where(b => b.AnotherInt == 5).ToList();
-						//entities[0].AnotherInt= 555;
-						//entities[0].BString = "Hello world" + DateTime.Now.ToLocaleTimeString();
-						$t3 = database.saveChanges();
+						$t2.getResult();
+						$t3 = database.TheBs.where(function(b) {
+							return b.jayDataObject.AnotherInt === 77;
+						}).toList();
 						$state = 3;
 						$t3.continueWith($sm);
 						return;
 					}
 					case 3: {
 						$state = -1;
-						$t3.getResult();
-						database2 = new $SaltarelleJayData_Example_Database();
-						$t4 = database2.ready();
+						entities = $t3.getResult();
+						//x = await database.TheBs.Where(b => b.AnotherInt == 5).ToList();
+						//entities[0].AnotherInt= 555;
+						//entities[0].BString = "Hello world" + DateTime.Now.ToLocaleTimeString();
+						$t4 = database.saveChanges();
 						$state = 4;
 						$t4.continueWith($sm);
 						return;
@@ -61,14 +61,23 @@
 					case 4: {
 						$state = -1;
 						$t4.getResult();
-						$t5 = database2.TheBs.toList();
+						database2 = new $SaltarelleJayData_Example_Database();
+						$t5 = database2.ready();
 						$state = 5;
 						$t5.continueWith($sm);
 						return;
 					}
 					case 5: {
 						$state = -1;
-						entities2 = $t5.getResult();
+						$t5.getResult();
+						$t6 = database2.TheBs.toList();
+						$state = 6;
+						$t6.continueWith($sm);
+						return;
+					}
+					case 6: {
+						$state = -1;
+						entities2 = $t6.getResult();
 						$('#content').html(ss.count(entities2).toString());
 						$state = -1;
 						break $sm1;

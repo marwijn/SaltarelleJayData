@@ -42,10 +42,10 @@ namespace SaltarelleJayData.Example
              entity.AnotherInt = 77;
             var database = new Database();
             await database.Ready();
-            //database.TheBs.Add(entity);
-            //await database.SaveChanges();
+            database.TheBs.Add(entity);
+            await database.SaveChanges();
 
-            var entities = await database.TheBs.ToList();
+            var entities = await database.TheBs.Where(b => b.AnotherInt == 77).ToList();
 
             //x = await database.TheBs.Where(b => b.AnotherInt == 5).ToList();
 

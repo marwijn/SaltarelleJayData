@@ -34,9 +34,15 @@ namespace JayDataApi
             });
         }
 
-        [InlineCode("{this}.jayDataObject.filter({func})")]
-        public void Where(Func<T, bool> func)
+        public AsyncQueryable<T> Where(Func<T, bool> func)
         {
+            return new AsyncQueryable<T>(WhereCore(func));
+        }
+
+        [InlineCode("{this}.jayDataObject.filter({func})")]
+        public object WhereCore(Func<T, bool> func)
+        {
+            return null;
         }
     }
 }

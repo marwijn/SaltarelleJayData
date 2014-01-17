@@ -26,6 +26,9 @@
 					}
 					return list;
 				});
+			},
+			where: function(func) {
+				return new $type(this.jayDataObject.filter(func));
 			}
 		}, function() {
 			return null;
