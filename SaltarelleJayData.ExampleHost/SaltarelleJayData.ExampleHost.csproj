@@ -22,6 +22,7 @@
     <Content Include="InMemoryProvider.js" />
     <Content Include="jaydata.js" />
     <Content Include="jquery.js" />
+    <Content Include="linq.js" />
     <Content Include="mscorlib.js" />
     <Content Include="Saltarelle.JayData.js" />
     <Content Include="SaltarelleJayData.Example.js" />
