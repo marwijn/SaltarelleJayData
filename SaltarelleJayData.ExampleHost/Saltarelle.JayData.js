@@ -28,7 +28,21 @@
 				});
 			},
 			where: function(func) {
-				return new $type(this.jayDataObject.filter(func));
+				var expression = func.toString();
+				var match = (new RegExp('\\s*function\\s*\\(\\s*(.*)\\s*\\)\\s*{\\s*(.*)\\s*}.*')).exec(expression);
+				expression = match[2].replace(new RegExp('\\.jayDataObject', 'g'), '');
+				var changed;
+				do {
+					var indexOfMatch = (new RegExp('indexOf\\((.*?)\\)[\\s\\S]*?!==[\\s\\S]*?-1', 'g')).exec(expression);
+					if (ss.isValue(indexOfMatch)) {
+						expression = ss.replaceAllString(expression, indexOfMatch[0], 'contains(' + indexOfMatch[1] + ')');
+						changed = true;
+					}
+					else {
+						changed = false;
+					}
+				} while (changed);
+				return new $type(this.jayDataObject.filter(new Function(match[1], expression)));
 			}
 		}, function() {
 			return null;

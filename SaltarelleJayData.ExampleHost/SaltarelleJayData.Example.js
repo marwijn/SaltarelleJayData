@@ -13,7 +13,7 @@
 		$($SaltarelleJayData_Example_$Program.$run);
 	};
 	$SaltarelleJayData_Example_$Program.$run = function() {
-		var $state = 0, entity, database, $t1, $t2, $t3, entities, $t4, database2, $t5, $t6, entities2;
+		var $state = 0, entity, database, $t1, $t2, $t3, test;
 		var $sm = function() {
 			$sm1:
 			for (;;) {
@@ -22,6 +22,7 @@
 						$state = -1;
 						entity = new $SaltarelleJayData_Example_MyEntity();
 						entity.jayDataObject.AnotherInt = 77;
+						entity.jayDataObject.BString = 'ahello';
 						database = new $SaltarelleJayData_Example_Database();
 						$t1 = database.ready();
 						$state = 1;
@@ -41,7 +42,7 @@
 						$state = -1;
 						$t2.getResult();
 						$t3 = database.TheBs.where(function(b) {
-							return b.jayDataObject.AnotherInt === 77;
+							return b.jayDataObject.AnotherInt === 77 && b.jayDataObject.BString === 'ahello';
 						}).toList();
 						$state = 3;
 						$t3.continueWith($sm);
@@ -49,36 +50,15 @@
 					}
 					case 3: {
 						$state = -1;
-						entities = $t3.getResult();
+						test = $t3.getResult();
 						//x = await database.TheBs.Where(b => b.AnotherInt == 5).ToList();
 						//entities[0].AnotherInt= 555;
 						//entities[0].BString = "Hello world" + DateTime.Now.ToLocaleTimeString();
-						$t4 = database.saveChanges();
-						$state = 4;
-						$t4.continueWith($sm);
-						return;
-					}
-					case 4: {
-						$state = -1;
-						$t4.getResult();
-						database2 = new $SaltarelleJayData_Example_Database();
-						$t5 = database2.ready();
-						$state = 5;
-						$t5.continueWith($sm);
-						return;
-					}
-					case 5: {
-						$state = -1;
-						$t5.getResult();
-						$t6 = database2.TheBs.toList();
-						$state = 6;
-						$t6.continueWith($sm);
-						return;
-					}
-					case 6: {
-						$state = -1;
-						entities2 = $t6.getResult();
-						$('#content').html(ss.count(entities2).toString());
+						//await database.SaveChanges();
+						//var database2 = new Database();
+						//await database2.Ready();
+						//var entities2 = await database2.TheBs.ToList();
+						$('#content').html(ss.getItem(test, 0).jayDataObject.BString);
 						$state = -1;
 						break $sm1;
 					}

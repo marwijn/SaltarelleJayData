@@ -40,12 +40,13 @@ namespace SaltarelleJayData.Example
         {
             var entity = new MyEntity ();
              entity.AnotherInt = 77;
+             entity.BString = "ahello";
             var database = new Database();
             await database.Ready();
             database.TheBs.Add(entity);
             await database.SaveChanges();
 
-            var entities = await database.TheBs.Where(b => b.AnotherInt == 77).ToList();
+             var test = await database.TheBs.Where(b => b.AnotherInt == 77 && b.BString=="ahello" ).ToList();
 
             //x = await database.TheBs.Where(b => b.AnotherInt == 5).ToList();
 
@@ -55,13 +56,13 @@ namespace SaltarelleJayData.Example
              //entities[0].AnotherInt= 555;
              //entities[0].BString = "Hello world" + DateTime.Now.ToLocaleTimeString();
 
-             await database.SaveChanges();
+             //await database.SaveChanges();
 
-             var database2 = new Database();
-             await database2.Ready();
-             var entities2 = await database2.TheBs.ToList();
+             //var database2 = new Database();
+             //await database2.Ready();
+             //var entities2 = await database2.TheBs.ToList();
 
-            jQuery.Select("#content").Html(entities2.Count.ToString());
+            jQuery.Select("#content").Html(test[0].BString);
         }
     }
 }

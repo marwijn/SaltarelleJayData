@@ -6895,12 +6895,12 @@ $C('$data.Expressions.ParameterResolverVisitor', $data.Expressions.ExpressionVis
     VisitProperty: function (eNode, context) {
         ///<param name="eNode" type="$data.Expressions.PropertyExpression" />
         ///
-        var exp;
-        if (eNode.expression.member.value = 'jayDataObject') {
-            exp = eNode.expression.expression;
-        } else {
+        //var exp;
+        //if (eNode.expression.member.value = 'jayDataObject') {
+        //    exp = eNode.expression.expression;
+        //} else {
             exp = eNode.expression;
-        }
+        //}
         
         var expression = this.Visit(exp, context);
 
